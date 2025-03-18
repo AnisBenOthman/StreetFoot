@@ -1,4 +1,6 @@
 package tn.esprit.tournamentservice.Service;
 
-public interface TournamentRulesService extends BaseService<TournamentService, Integer>{
+import tn.esprit.tournamentservice.Entities.TournamentRules;
+
+public interface TournamentRulesService extends BaseService<TournamentRules, Integer>{
 }
