@@ -11,6 +11,7 @@ import tn.esprit.tournamentservice.Repositories.TournamentRulesRepository;
 import tn.esprit.tournamentservice.Service.TournamentRulesService;
 import tn.esprit.tournamentservice.Service.TournamentService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -63,6 +64,11 @@ public class TournamentRulesImpl implements TournamentRulesService {
             return;
         }
         tournamentRulesRepository.deleteById(id);
+    }
+
+    @Override
+    public List<TournamentRules> getAll() {
+        return tournamentRulesRepository.findAll();
     }
 
 }

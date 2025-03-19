@@ -11,6 +11,9 @@ import tn.esprit.tournamentservice.Repositories.TournamentRepository;
 import tn.esprit.tournamentservice.Service.TournamentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class TournamentImpl implements TournamentService {
@@ -73,5 +76,10 @@ public class TournamentImpl implements TournamentService {
 
         }
 
+    }
+
+    @Override
+    public List<Tournament> getAll() {
+        return tournamentRepository.findAll();
     }
 }

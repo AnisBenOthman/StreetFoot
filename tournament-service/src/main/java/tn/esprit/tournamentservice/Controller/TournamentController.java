@@ -11,6 +11,7 @@ import tn.esprit.tournamentservice.Entities.Tournament;
 import tn.esprit.tournamentservice.Exception.TournamentException;
 import tn.esprit.tournamentservice.ServiceImpl.TournamentImpl;
 
+import java.util.List;
 import java.util.Map;
 @Slf4j
 @RestController
@@ -69,6 +70,14 @@ public class TournamentController {
 
     private ResponseEntity<Map<String, String>> buildErrorResponse(HttpStatus status, String message) {
         return ResponseEntity.status(status).body(Map.of("error", message));
+    }
+    @GetMapping("getall")
+    public ResponseEntity<?> getAll() {
+        try{
+            return ResponseEntity.ok(tournamentImpl.getAll());
+        }catch (Exception e){
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
+        }
     }
 
     TournamentImpl tournamentImpl;

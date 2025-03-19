@@ -13,6 +13,7 @@ import tn.esprit.tournamentservice.Exception.TournamentException;
 import tn.esprit.tournamentservice.ServiceImpl.TournamentImpl;
 import tn.esprit.tournamentservice.ServiceImpl.TournamentRulesImpl;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -20,15 +21,16 @@ import java.util.Map;
 @RequestMapping("tournamentRules")
 @AllArgsConstructor
 public class TournamentRulesController {
-    public ResponseEntity<?> add(TournamentRules tournamentRules) {
+    @PostMapping("add")
+    public ResponseEntity<?> add(@RequestBody TournamentRules tournamentRules) {
         try {
             return ResponseEntity.ok(tournamentRulesImpl.add(tournamentRules));
         } catch (Exception e) {
             return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
         }
     }
-
-    public ResponseEntity<?> update(TournamentRules tournamentRules, Integer id) {
+@PutMapping("update/{id}")
+    public ResponseEntity<?> update(@RequestBody TournamentRules tournamentRules, @PathVariable Integer id) {
         try {
             return ResponseEntity.ok(tournamentRulesImpl.update(tournamentRules, id));
         } catch (EntityNotFoundException e) {
@@ -38,7 +40,7 @@ public class TournamentRulesController {
         }
 
     }
-
+@GetMapping("getbyid/{id}")
     public ResponseEntity<?> retrieveById(Integer id) {
         try {
             return ResponseEntity.ok(tournamentRulesImpl.retrieveById(id));
@@ -49,8 +51,8 @@ public class TournamentRulesController {
         }
 
     }
-
-    public ResponseEntity<?> delete(Integer id) {
+@DeleteMapping("delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
             tournamentRulesImpl.delete(id);
         return ResponseEntity.ok(Map.of("message :","delete seccessfully"));
@@ -62,6 +64,14 @@ public class TournamentRulesController {
         }
 
 
+    }
+@GetMapping("getAll")
+    public ResponseEntity<?> getAll() {
+        try{
+            return ResponseEntity.ok(tournamentRulesImpl.getAll());
+        }catch (Exception e){
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
+        }
     }
 
     TournamentRulesImpl tournamentRulesImpl;
