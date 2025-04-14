@@ -8,5 +8,6 @@ public interface BaseService<T, ID> {
     T update(T entity, ID id);
     T retrieveById(ID id);
     void delete(ID id);
+    void deleteAll();
     List<T> getAll();
 }

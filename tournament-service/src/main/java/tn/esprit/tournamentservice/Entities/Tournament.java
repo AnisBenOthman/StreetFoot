@@ -25,6 +25,8 @@ public class Tournament extends BaseEntity{
     LocalDate startDate;
     @NotNull(message = "end date is required")
     LocalDate endDate;
+    @NotNull(message = "deadline registration is required")
+    LocalDate teamRegistrationDeadline;
 
     @Enumerated(EnumType.STRING)
     Status status;

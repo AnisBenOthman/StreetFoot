@@ -79,6 +79,11 @@ public class TournamentImpl implements TournamentService {
     }
 
     @Override
+    public void deleteAll() {
+        tournamentRepository.deleteAll();
+    }
+
+    @Override
     public List<Tournament> getAll() {
         return tournamentRepository.findAll();
     }

@@ -1,6 +1,7 @@
 package tn.esprit.tournamentservice.Controller;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,16 +23,28 @@ import java.util.Map;
 @AllArgsConstructor
 public class TournamentRulesController {
     @PostMapping("add")
-    public ResponseEntity<?> add(@RequestBody TournamentRules tournamentRules) {
+    public ResponseEntity<?> add(@Valid @RequestBody TournamentRules tournamentRules) {
         try {
+            if (tournamentRules.getNumberOfTeams() % 2 != 0) {
+                return buildErrorResponse(HttpStatus.BAD_REQUEST, "Le nombre d'équipes doit être pair");
+            }
+            if (tournamentRules.getTeamsPerGroup() % 2 != 0) {
+                return buildErrorResponse(HttpStatus.BAD_REQUEST, "Le nombre d'équipes par groupe doit être pair");
+            }
             return ResponseEntity.ok(tournamentRulesImpl.add(tournamentRules));
         } catch (Exception e) {
             return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
         }
     }
 @PutMapping("update/{id}")
-    public ResponseEntity<?> update(@RequestBody TournamentRules tournamentRules, @PathVariable Integer id) {
+    public ResponseEntity<?> update(@Valid @RequestBody TournamentRules tournamentRules, @PathVariable Integer id) {
         try {
+            if (tournamentRules.getNumberOfTeams() % 2 != 0) {
+                return buildErrorResponse(HttpStatus.BAD_REQUEST, "Le nombre d'équipes doit être pair");
+            }
+            if (tournamentRules.getTeamsPerGroup() % 2 != 0) {
+                return buildErrorResponse(HttpStatus.BAD_REQUEST, "Le nombre d'équipes par groupe doit être pair");
+            }
             return ResponseEntity.ok(tournamentRulesImpl.update(tournamentRules, id));
         } catch (EntityNotFoundException e) {
             return buildErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());

@@ -11,7 +11,7 @@ import tn.esprit.tournamentservice.Entities.Tournament;
 import tn.esprit.tournamentservice.Exception.TournamentException;
 import tn.esprit.tournamentservice.ServiceImpl.TournamentImpl;
 
-import java.util.List;
+
 import java.util.Map;
 @Slf4j
 @RestController
@@ -21,6 +21,9 @@ public class TournamentController {
     @PostMapping("addtournament")
     public ResponseEntity<?> add(@Valid @RequestBody Tournament tournament) {
         try {
+            if (tournament.getTeamRegistrationDeadline().isAfter(tournament.getStartDate().minusWeeks(3))) {
+                return buildErrorResponse(HttpStatus.BAD_REQUEST, "La date limite d'inscription doit être au moins 3 semaines avant le début du tournoi");
+            }
             Tournament createdTournament = tournamentImpl.add(tournament);
             return ResponseEntity.ok(createdTournament);
         } catch (TournamentException e) {

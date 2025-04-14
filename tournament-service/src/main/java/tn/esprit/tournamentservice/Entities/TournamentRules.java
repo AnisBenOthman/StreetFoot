@@ -2,6 +2,7 @@ package tn.esprit.tournamentservice.Entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -24,6 +25,7 @@ public class TournamentRules extends BaseEntity{
     Integer numberOfGroups;
     Integer teamsPerGroup;
     @Min(value = 4, message = "Championship must have at least 4 teams")
+    @Max(value = 32, message = "championship must have at most 32 teams")
     Integer numberOfTeams;
     //Team structure
     int mainRoster;
