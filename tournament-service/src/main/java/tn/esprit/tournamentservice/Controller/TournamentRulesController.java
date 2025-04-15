@@ -87,6 +87,15 @@ public class TournamentRulesController {
         }
     }
 
+    public ResponseEntity<?> deleteAll() {
+        try {
+            tournamentRulesImpl.deleteAll();
+            return ResponseEntity.ok(Map.of("message", "All Tournament rules deleted successfully"));
+        }  catch (Exception e) {
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
+        }
+    }
+
     TournamentRulesImpl tournamentRulesImpl;
 
     private ResponseEntity<Map<String, String>> buildErrorResponse(HttpStatus status, String message) {

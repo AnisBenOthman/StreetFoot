@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,12 +33,25 @@ public class Tournament extends BaseEntity{
     Status status;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tournament_rule_id")
-     TournamentRules tournamentRules;
+    TournamentRules tournamentRules;
+    @ElementCollection
+    List<Integer> participatingTeamIds;
     String Awards;
+    Long userId;
 
     @AssertTrue(message = "End date must be after start date")
     boolean isEndDateAfterStartDate(){
         return  startDate != null && endDate != null && endDate.isAfter(startDate);
+    }
+    @AssertTrue(message = "Team registration deadline must be at least 3 weeks before the tournament starts")
+    boolean isTeamRegistrationDeadlineValid() {
+        return teamRegistrationDeadline != null && startDate != null &&
+                teamRegistrationDeadline.isBefore(startDate.minusWeeks(3));
+    }
+    public boolean isReadyForScheduling() {
+        return participatingTeamIds != null
+                && tournamentRules != null
+                || participatingTeamIds.size() == tournamentRules.getNumberOfTeams()|| participatingTeamIds.size() == tournamentRules.getNumberOfTeamsForGroupStage();
     }
 
 
