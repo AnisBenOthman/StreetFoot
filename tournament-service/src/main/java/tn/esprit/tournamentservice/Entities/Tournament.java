@@ -1,5 +1,6 @@
 package tn.esprit.tournamentservice.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
@@ -30,8 +31,9 @@ public class Tournament extends BaseEntity{
     LocalDate teamRegistrationDeadline;
 
     @Enumerated(EnumType.STRING)
-    Status status;
-    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    Status status = Status.PENDING;
+    @OneToOne()
     @JoinColumn(name = "tournament_rule_id")
     TournamentRules tournamentRules;
     @ElementCollection
@@ -40,14 +42,15 @@ public class Tournament extends BaseEntity{
     Long userId;
 
     @AssertTrue(message = "End date must be after start date")
-    boolean isEndDateAfterStartDate(){
+    public boolean isEndDateAfterStartDate(){
         return  startDate != null && endDate != null && endDate.isAfter(startDate);
     }
     @AssertTrue(message = "Team registration deadline must be at least 3 weeks before the tournament starts")
-    boolean isTeamRegistrationDeadlineValid() {
+    public boolean isTeamRegistrationDeadlineValid() {
         return teamRegistrationDeadline != null && startDate != null &&
                 teamRegistrationDeadline.isBefore(startDate.minusWeeks(3));
     }
+    @JsonIgnore
     public boolean isReadyForScheduling() {
         return participatingTeamIds != null
                 && tournamentRules != null

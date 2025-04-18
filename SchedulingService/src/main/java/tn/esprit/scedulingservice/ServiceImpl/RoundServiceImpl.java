@@ -1,5 +1,6 @@
 package tn.esprit.scedulingservice.ServiceImpl;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.scedulingservice.Entities.Round;
@@ -14,26 +15,42 @@ public class RoundServiceImpl implements RoundService {
     RoundRepository roundRepository;
     @Override
     public Optional<Round> retrieveById(String s) {
-        return Optional.empty();
+
+        return roundRepository.findById(s);
     }
 
     @Override
     public List<Round> retrieveAll() {
-        return null;
+
+        return roundRepository.findAll();
     }
 
     @Override
     public Round add(Round object) {
-        return null;
+
+        return roundRepository.save(object);
     }
 
     @Override
     public Round update(Round object, String s) {
-        return null;
+
+        return roundRepository.findById(s).map(round -> {
+            round.setRoundDate(object.getRoundDate());
+            round.setRoundNumber(object.getRoundNumber());
+            round.setTournamentId(object.getTournamentId());
+            return roundRepository.save(round);
+        }).orElseThrow(() -> new EntityNotFoundException("Round with id " + s + "not found"));
     }
 
     @Override
     public void delete(String s) {
+        roundRepository.deleteById(s);
+
+    }
+
+    @Override
+    public void deleteAll() {
+        roundRepository.deleteAll();
 
     }
 }

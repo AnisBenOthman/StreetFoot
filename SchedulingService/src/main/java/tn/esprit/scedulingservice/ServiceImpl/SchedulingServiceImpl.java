@@ -5,26 +5,30 @@ import org.springframework.stereotype.Service;
 import tn.esprit.scedulingservice.DTO.SchedulingRequest;
 import tn.esprit.scedulingservice.Entities.MatchSchedule;
 import tn.esprit.scedulingservice.Entities.Round;
+import tn.esprit.scedulingservice.Entities.Status;
 import tn.esprit.scedulingservice.Repositories.MatchSceduleRepository;
 import tn.esprit.scedulingservice.Repositories.RoundRepository;
 import tn.esprit.scedulingservice.Service.SchedulingService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class SchedulingServiceImpl implements SchedulingService {
     RoundRepository roundRepository;
     MatchSceduleRepository matchSceduleRepository;
+
     @Override
     public void generateScheduling(SchedulingRequest schedulingRequest) {
-        if("GROUP_STAGE".equalsIgnoreCase(schedulingRequest.tournamentType())){
+        if ("GROUP_STAGE".equalsIgnoreCase(schedulingRequest.tournamentType())) {
             generateGroupStageSchedule(schedulingRequest);
         } else if ("CHAMPIONSHIP".equalsIgnoreCase(schedulingRequest.tournamentType())) {
             generateChampionshipSchedule(schedulingRequest);
 
-        }else {
+        } else {
             throw new IllegalArgumentException("Invalid tournament type :" + schedulingRequest.tournamentType());
         }
     }
@@ -34,34 +38,91 @@ public class SchedulingServiceImpl implements SchedulingService {
         int numberOfTeams = schedulingRequest.numberOfTeams();
         int numberOfRounds = numberOfTeams - 1;
         int matchesPerRound = numberOfTeams / 2;
-        List<Long> teamsId = new ArrayList<>();
+        List<Integer> teamsId = new ArrayList<>(schedulingRequest.teams());
         LocalDate currentRoundDate = schedulingRequest.startDate();
         LocalDate tournamentEndDate = schedulingRequest.endDate();
 
         String mode = schedulingRequest.championshipMode();
-        for(int round = 0; round< numberOfRounds; round++){
-            List<MatchSchedule> roundMatches = new ArrayList<>();
+        for (int roundNum = 1; roundNum < numberOfRounds; roundNum++) {
+
             Round roundSchedule = new Round();
             roundSchedule.setTournamentId(schedulingRequest.tournamentId());
-            roundSchedule.setRoundNumber(round);
+            roundSchedule.setRoundNumber(roundNum);
             roundSchedule.setRoundDate(currentRoundDate);
-
-            for( int match=0; match<matchesPerRound; match++){
+            roundSchedule = roundRepository.save(roundSchedule);
+            List<MatchSchedule> roundMatches = new ArrayList<>();
+            for (int match = 0; match < matchesPerRound; match++) {
                 int homeIndex = match;
                 int awayIndex = numberOfTeams - match - 1;
                 MatchSchedule matchSchedule = new MatchSchedule();
                 matchSchedule.setHomeTeamId(schedulingRequest.teams().get(homeIndex));
                 matchSchedule.setAwayTeamId(schedulingRequest.teams().get(awayIndex));
-
+                roundMatches.add(matchSchedule);
 
 
             }
+            Integer pivot = teamsId.remove(0);
+            Integer last = teamsId.remove(teamsId.size() - 1);
+            teamsId.add(0, last);
+            teamsId.add(0, pivot);
+            matchSceduleRepository.saveAll(roundMatches);
+            currentRoundDate.plusDays(schedulingRequest.roundFrequency());
         }
     }
 
     @Override
     public void generateGroupStageSchedule(SchedulingRequest schedulingRequest) {
+        int numberOfGroups = schedulingRequest.numberOfGroups();
+        List<Integer> allTeams = new ArrayList<>(schedulingRequest.teams());
+        Collections.shuffle(allTeams);
+        int teamsPerGroup = schedulingRequest.numberOfTeams() / numberOfGroups;
+        LocalDate currentDate = schedulingRequest.startDate();
 
+        // Step 1: Split into groups
+        List<List<Integer>> groups = new ArrayList<>();
+        for (int i = 0; i < numberOfGroups; i++) {
+            groups.add(allTeams.subList(i * teamsPerGroup, (i + 1) * teamsPerGroup));
+        }
+
+        int numberOfRounds = teamsPerGroup - 1;
+
+        // Step 2: Generate rounds across all groups
+        for (int roundIndex = 0; roundIndex < numberOfRounds; roundIndex++) {
+            // One global round per date
+            Round globalRound = new Round();
+            globalRound.setTournamentId(schedulingRequest.tournamentId());
+            globalRound.setRoundNumber(roundIndex + 1);
+            globalRound.setRoundDate(currentDate);
+            roundRepository.save(globalRound);
+
+            // Step 3: For each group, generate match pairings for this round
+            for (List<Integer> group : groups) {
+                List<Integer> rotation = new ArrayList<>(group);
+                Integer fixed = rotation.get(0);
+                List<Integer> rotating = rotation.subList(1, rotation.size());
+                Collections.rotate(rotating, -roundIndex);
+                List<Integer> currentRound = new ArrayList<>();
+                currentRound.add(fixed);
+                currentRound.addAll(rotating);
+
+                int matchCount = teamsPerGroup / 2;
+
+                for (int i = 0; i < matchCount; i++) {
+                    Integer home = currentRound.get(i);
+                    Integer away = currentRound.get(teamsPerGroup - 1 - i);
+
+                    MatchSchedule match = new MatchSchedule();
+                    match.setRoundId(globalRound.getId());
+                    match.setHomeTeamId(home);
+                    match.setAwayTeamId(away);
+                    match.setStatus(Status.PLANNED);
+                    matchSceduleRepository.save(match);
+                }
+            }
+
+            currentDate = currentDate.plusDays(schedulingRequest.roundFrequency()); // Next global round date
+        }
     }
+
 
 }

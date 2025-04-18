@@ -7,11 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.tournamentservice.Entities.Status;
 import tn.esprit.tournamentservice.Entities.Tournament;
 import tn.esprit.tournamentservice.Exception.TournamentException;
 import tn.esprit.tournamentservice.ServiceImpl.TournamentImpl;
 
 
+import java.util.List;
 import java.util.Map;
 @Slf4j
 @RestController
@@ -21,6 +23,10 @@ public class TournamentController {
     @PostMapping("addtournament")
     public ResponseEntity<?> add(@Valid @RequestBody Tournament tournament) {
         try {
+            if (tournament.getStartDate() != null && tournament.getEndDate() != null &&
+                    !tournament.getEndDate().isAfter(tournament.getStartDate())) {
+                return buildErrorResponse(HttpStatus.BAD_REQUEST, "La date de fin doit être postérieure à la date de début");
+            }
             if (tournament.getTeamRegistrationDeadline().isAfter(tournament.getStartDate().minusWeeks(3))) {
                 return buildErrorResponse(HttpStatus.BAD_REQUEST, "La date limite d'inscription doit être au moins 3 semaines avant le début du tournoi");
             }
@@ -35,8 +41,15 @@ public class TournamentController {
     }
 
     @PutMapping("updateTournament/{id}")
-    public ResponseEntity<?> update(@RequestBody Tournament tournament, @PathVariable Integer id) {
+    public ResponseEntity<?> update(@Valid @RequestBody Tournament tournament, @PathVariable Integer id) {
         try {
+            if (tournament.getStartDate() != null && tournament.getEndDate() != null &&
+                    !tournament.getEndDate().isAfter(tournament.getStartDate())) {
+                return buildErrorResponse(HttpStatus.BAD_REQUEST, "La date de fin doit être postérieure à la date de début");
+            }
+            if (tournament.getTeamRegistrationDeadline().isAfter(tournament.getStartDate().minusWeeks(3))) {
+                return buildErrorResponse(HttpStatus.BAD_REQUEST, "La date limite d'inscription doit être au moins 3 semaines avant le début du tournoi");
+            }
             return ResponseEntity.ok(tournamentImpl.update(tournament, id));
         } catch (EntityNotFoundException e) {
             return buildErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
@@ -48,7 +61,7 @@ public class TournamentController {
     }
 
     @GetMapping("gettournamentbyid/{id}")
-    public ResponseEntity<?> retrieveById(Integer id) {
+    public ResponseEntity<?> retrieveById(@PathVariable Integer id) {
 
         try {
             return ResponseEntity.ok(tournamentImpl.retrieveById(id));
@@ -60,7 +73,7 @@ public class TournamentController {
     }
 
     @DeleteMapping("deletetournament/{id}")
-    public ResponseEntity<?> delete(Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
             tournamentImpl.delete(id);
             return ResponseEntity.ok(Map.of("message", "Tournament deleted successfully"));
@@ -91,6 +104,26 @@ public class TournamentController {
             return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
         }
     }
+    @GetMapping("gettournamentbyuser/{userId}")
+    public ResponseEntity<?> findByCreatedByUserId(@PathVariable Long userId) {
+        try {
+            return ResponseEntity.ok(tournamentImpl.findByCreatedByUserId(userId));
+        } catch (EntityNotFoundException e) {
+            return buildErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (Exception e) {
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
+        }
+    }
+
+    @GetMapping("gettournamentbystatus/{status}")
+    public ResponseEntity<?> findByStatus(@PathVariable Status status) {
+        try {
+            return ResponseEntity.ok(tournamentImpl.findByStatus(status));
+        } catch (Exception e) {
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
+        }
+    }
+
 
     TournamentImpl tournamentImpl;
 

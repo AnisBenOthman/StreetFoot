@@ -1,5 +1,5 @@
 package tn.esprit.tournamentservice.Entities;
 
 public enum Status {
-    PLANNED,ONGOING,FINISHED
+    PENDING,PLANNED,ONGOING,FINISHED
 }

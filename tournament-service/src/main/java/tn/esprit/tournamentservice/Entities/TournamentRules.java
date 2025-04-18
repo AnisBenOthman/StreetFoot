@@ -1,5 +1,6 @@
 package tn.esprit.tournamentservice.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
@@ -15,6 +16,11 @@ import lombok.experimental.FieldDefaults;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TournamentRules extends BaseEntity{
+    @JsonIgnore
+    @OneToOne(mappedBy = "tournamentRules", cascade = CascadeType.ALL, orphanRemoval = true)
+    Tournament tournament;
+    int roundFrequency;
+
     // 1. Tournament type: CHAMPIONSHIP system or GROUP_STAGE.
     @Enumerated(EnumType.STRING)
     TournamentType tournamentType;

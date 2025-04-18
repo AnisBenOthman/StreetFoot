@@ -86,7 +86,7 @@ public class TournamentRulesController {
             return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
         }
     }
-
+    @DeleteMapping("deleteall")
     public ResponseEntity<?> deleteAll() {
         try {
             tournamentRulesImpl.deleteAll();

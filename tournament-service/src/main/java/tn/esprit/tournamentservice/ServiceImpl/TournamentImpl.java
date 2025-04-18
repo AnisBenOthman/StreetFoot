@@ -3,6 +3,7 @@ package tn.esprit.tournamentservice.ServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import tn.esprit.tournamentservice.Entities.Status;
 import tn.esprit.tournamentservice.Entities.Tournament;
 
 
@@ -86,5 +87,15 @@ public class TournamentImpl implements TournamentService {
     @Override
     public List<Tournament> getAll() {
         return tournamentRepository.findAll();
+    }
+
+    @Override
+    public List<Tournament> findByCreatedByUserId(Long userId) {
+        return tournamentRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<Tournament> findByStatus(Status status) {
+        return tournamentRepository.findByStatus(status);
     }
 }

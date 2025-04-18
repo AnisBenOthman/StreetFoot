@@ -9,4 +9,5 @@ public interface BaseService<T,ID> {
     T add(T object);
     T update(T object, ID id);
     void delete(ID id);
+    void deleteAll();
 }
