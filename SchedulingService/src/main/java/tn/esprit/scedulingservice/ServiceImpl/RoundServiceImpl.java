@@ -53,4 +53,9 @@ public class RoundServiceImpl implements RoundService {
         roundRepository.deleteAll();
 
     }
+
+    @Override
+    public List<Round> findAllRoundByTournament(Long tournamentId) {
+        return roundRepository.findByTournamentId(tournamentId);
+    }
 }

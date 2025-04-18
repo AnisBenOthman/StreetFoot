@@ -55,4 +55,9 @@ public class MatchSceduleServiceImp implements MatchSceduleService {
     public void deleteAll() {
         matchSceduleRepository.deleteAll();
     }
+
+    @Override
+    public List<MatchSchedule> findAllMatchByRound(String roundId) {
+        return matchSceduleRepository.findByRoundId(roundId);
+    }
 }
