@@ -46,7 +46,7 @@ public class MatchSceduleController {
     public ResponseEntity<?> delete(@PathVariable String id) {
         try{
             matchSceduleServiceImp.delete(id);
-            return ResponseEntity.ok("match with id "+ id +" deleted successfuly");
+            return ResponseEntity.noContent().build();
         }catch (Exception e){
             return ResponseEntity.notFound().build();
         }
@@ -56,7 +56,7 @@ public class MatchSceduleController {
     @DeleteMapping("deleteallmatch")
     public ResponseEntity<String> deleteAll() {
         matchSceduleServiceImp.deleteAll();
-        return ResponseEntity.ok("All match deleted successfully");
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("getallmatchbyround/{roundId}")

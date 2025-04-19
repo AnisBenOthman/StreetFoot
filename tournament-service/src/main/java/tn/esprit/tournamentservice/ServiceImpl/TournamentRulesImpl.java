@@ -33,7 +33,7 @@ public class TournamentRulesImpl implements TournamentRulesService {
     }
 
     @Override
-    public TournamentRules update(TournamentRules tournamentRules, Integer id) {
+    public TournamentRules update(TournamentRules tournamentRules, Long id) {
 
         return tournamentRulesRepository.findById(id).map(existingTournamentRules -> {
             existingTournamentRules.setChampionshipMode(tournamentRules.getChampionshipMode());
@@ -53,12 +53,12 @@ public class TournamentRulesImpl implements TournamentRulesService {
     }
 
     @Override
-    public TournamentRules retrieveById(Integer id) {
+    public TournamentRules retrieveById(Long id) {
         return tournamentRulesRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("TournamentRules with id" + id + "not found"));
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (!tournamentRulesRepository.existsById(id)) {
             log.warn("tournamentRules with id {} not found, deletion skipped", id);
             return;

@@ -41,7 +41,7 @@ public class TournamentController {
     }
 
     @PutMapping("updateTournament/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody Tournament tournament, @PathVariable Integer id) {
+    public ResponseEntity<?> update(@Valid @RequestBody Tournament tournament, @PathVariable Long id) {
         try {
             if (tournament.getStartDate() != null && tournament.getEndDate() != null &&
                     !tournament.getEndDate().isAfter(tournament.getStartDate())) {
@@ -61,7 +61,7 @@ public class TournamentController {
     }
 
     @GetMapping("gettournamentbyid/{id}")
-    public ResponseEntity<?> retrieveById(@PathVariable Integer id) {
+    public ResponseEntity<?> retrieveById(@PathVariable Long id) {
 
         try {
             return ResponseEntity.ok(tournamentImpl.retrieveById(id));
@@ -73,7 +73,7 @@ public class TournamentController {
     }
 
     @DeleteMapping("deletetournament/{id}")
-    public ResponseEntity<?> delete(@PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             tournamentImpl.delete(id);
             return ResponseEntity.ok(Map.of("message", "Tournament deleted successfully"));
@@ -124,6 +124,11 @@ public class TournamentController {
         }
     }
 
+@PostMapping("registreteams/{tournamentId}")
+    public ResponseEntity<Tournament> registerTeams(@PathVariable Long tournamentId, @RequestBody List<Integer> teamsId) {
+        Tournament tournament = tournamentImpl.registerTeams(tournamentId, teamsId);
+        return ResponseEntity.ok(tournament);
+    }
 
     TournamentImpl tournamentImpl;
 

@@ -42,7 +42,7 @@ public class RoundController {
     public ResponseEntity<Void> delete(String id) {
         try{
             roundService.delete(id);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.noContent().build();
         }catch (Exception e){
             return ResponseEntity.notFound().build();
         }
@@ -51,7 +51,7 @@ public class RoundController {
 @DeleteMapping("deleteallrounds")
     public ResponseEntity<Void> deleteAll() {
         roundService.deleteAll();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 @GetMapping("getallroundbytournament/{tournamentId}")
     public ResponseEntity<List<Round>>  findAllRoundByTournament(@PathVariable Long tournamentId) {

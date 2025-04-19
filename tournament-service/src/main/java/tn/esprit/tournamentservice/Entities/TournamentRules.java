@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,6 +20,7 @@ public class TournamentRules extends BaseEntity{
     @JsonIgnore
     @OneToOne(mappedBy = "tournamentRules", cascade = CascadeType.ALL, orphanRemoval = true)
     Tournament tournament;
+    @NotNull(message = "round frequency must be filled")
     int roundFrequency;
 
     // 1. Tournament type: CHAMPIONSHIP system or GROUP_STAGE.

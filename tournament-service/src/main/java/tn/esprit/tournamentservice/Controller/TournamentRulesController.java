@@ -37,7 +37,7 @@ public class TournamentRulesController {
         }
     }
 @PutMapping("update/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody TournamentRules tournamentRules, @PathVariable Integer id) {
+    public ResponseEntity<?> update(@Valid @RequestBody TournamentRules tournamentRules, @PathVariable Long id) {
         try {
             if (tournamentRules.getNumberOfTeams() % 2 != 0) {
                 return buildErrorResponse(HttpStatus.BAD_REQUEST, "Le nombre d'équipes doit être pair");
@@ -54,7 +54,7 @@ public class TournamentRulesController {
 
     }
 @GetMapping("getbyid/{id}")
-    public ResponseEntity<?> retrieveById(Integer id) {
+    public ResponseEntity<?> retrieveById(Long id) {
         try {
             return ResponseEntity.ok(tournamentRulesImpl.retrieveById(id));
         } catch (EntityNotFoundException e) {
@@ -65,7 +65,7 @@ public class TournamentRulesController {
 
     }
 @DeleteMapping("delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             tournamentRulesImpl.delete(id);
         return ResponseEntity.ok(Map.of("message :","delete seccessfully"));
