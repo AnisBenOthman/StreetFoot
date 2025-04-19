@@ -42,14 +42,14 @@ public class SchedulingServiceImpl implements SchedulingService {
         LocalDate currentRoundDate = schedulingRequest.startDate();
         LocalDate tournamentEndDate = schedulingRequest.endDate();
 
-        String mode = schedulingRequest.championshipMode();
+
         for (int roundNum = 1; roundNum < numberOfRounds; roundNum++) {
 
             Round roundSchedule = new Round();
             roundSchedule.setTournamentId(schedulingRequest.tournamentId());
             roundSchedule.setRoundNumber(roundNum);
             roundSchedule.setRoundDate(currentRoundDate);
-            roundSchedule = roundRepository.save(roundSchedule);
+            roundRepository.save(roundSchedule);
             List<MatchSchedule> roundMatches = new ArrayList<>();
             for (int match = 0; match < matchesPerRound; match++) {
                 int homeIndex = match;
