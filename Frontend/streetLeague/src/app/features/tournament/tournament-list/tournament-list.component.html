@@ -1,1 +1,46 @@
-<p>tournament-list works!</p>
+<div class="container">
+    <h1 class="mat-headline-4">Liste des Tournois</h1>
+    
+    <div class="actions">
+      <button mat-raised-button color="primary" routerLink="/tournaments/new">
+        <mat-icon>add</mat-icon> Créer un nouveau tournoi
+      </button>
+    </div>
+    
+    <div class="tournaments-list">
+      <mat-card *ngFor="let tournament of tournaments" class="tournament-card" [routerLink]="['/tournaments', tournament.id]">
+        <mat-card-header>
+          <mat-card-title>{{ tournament.name }}</mat-card-title>
+          <mat-card-subtitle>
+            <mat-chip-set>
+              <mat-chip [ngClass]="getStatusClass(tournament.status)">{{ getStatusLabel(tournament.status) }}</mat-chip>
+              <mat-chip>{{ tournament.tournamentRules.tournamentType }}</mat-chip>
+            </mat-chip-set>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ tournament.description }}</p>
+          <div class="tournament-details">
+            <div class="detail-item">
+              <mat-icon>event</mat-icon>
+              <span>Du {{ tournament.startDate | date:'dd/MM/yyyy' }} au {{ tournament.endDate | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>groups</mat-icon>
+              <span>{{ tournament.participatingTeamIds.length }} / {{ tournament.tournamentRules.numberOfTeams }} équipes</span>
+            </div>
+            <div class="detail-item" *ngIf="tournament.awards">
+              <mat-icon>emoji_events</mat-icon>
+              <span>{{ tournament.awards }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <div *ngIf="tournaments.length === 0" class="no-tournaments">
+        <mat-icon>sports</mat-icon>
+        <p>Aucun tournoi disponible. Créez votre premier tournoi !</p>
+      </div>
+    </div>
+  </div>
+  
