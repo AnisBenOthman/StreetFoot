@@ -1,0 +1,220 @@
+<div class="container">
+    <h1 class="mat-headline-4">Créer un nouveau tournoi</h1>
+    
+    <form [formGroup]="tournamentForm" (ngSubmit)="onSubmit()" class="tournament-form" role="form" aria-label="Formulaire de création de tournoi">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Informations générales</mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Nom du tournoi</mat-label>
+              <input matInput formControlName="name" required>
+              <mat-error *ngIf="tournamentForm.get('name')?.hasError('required')">
+                Le nom du tournoi est requis
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" rows="3"></textarea>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row date-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Date de début</mat-label>
+              <input matInput [matDatepicker]="startPicker" formControlName="startDate" required>
+              <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+              <mat-error *ngIf="tournamentForm.get('startDate')?.hasError('required')">
+                La date de début est requise
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Date de fin</mat-label>
+              <input matInput [matDatepicker]="endPicker" formControlName="endDate" required>
+              <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+              <mat-error *ngIf="tournamentForm.get('endDate')?.hasError('required')">
+                La date de fin est requise
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Date limite d'inscription</mat-label>
+              <input matInput [matDatepicker]="deadlinePicker" formControlName="teamRegistrationDeadline" required>
+              <mat-datepicker-toggle matSuffix [for]="deadlinePicker"></mat-datepicker-toggle>
+              <mat-datepicker #deadlinePicker></mat-datepicker>
+              <mat-error *ngIf="tournamentForm.get('teamRegistrationDeadline')?.hasError('required')">
+                La date limite d'inscription est requise
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Récompenses</mat-label>
+              <input matInput formControlName="awards" required aria-required="true">
+              <mat-error *ngIf="tournamentForm.get('awards')?.hasError('required')">
+                Les récompenses sont requises
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <mat-card formGroupName="tournamentRules">
+        <mat-card-header>
+          <mat-card-title>Règles du tournoi</mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Type de tournoi</mat-label>
+              <mat-select formControlName="tournamentType" required>
+                <mat-option [value]="tournamentTypes.CHAMPIONSHIP">Championnat</mat-option>
+                <mat-option [value]="tournamentTypes.GROUP_STAGE">Phase de groupes</mat-option>
+              </mat-select>
+              <mat-error *ngIf="tournamentRulesForm?.get('tournamentType')?.hasError('required')">
+                Le type de tournoi est requis
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" *ngIf="tournamentRulesForm?.get('tournamentType')?.value === tournamentTypes.CHAMPIONSHIP">
+              <mat-label>Mode de championnat</mat-label>
+              <mat-select formControlName="championshipMode">
+                <mat-option [value]="championshipModes.HOME_ONLY">Matchs à domicile uniquement</mat-option>
+                <mat-option [value]="championshipModes.HOME_AWAY">Matchs aller-retour</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row" *ngIf="tournamentRulesForm?.get('tournamentType')?.value === tournamentTypes.GROUP_STAGE">
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre de groupes</mat-label>
+              <input matInput type="number" formControlName="numberOfGroups" min="2" max="8">
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Équipes par groupe</mat-label>
+              <input matInput type="number" formControlName="teamsPerGroup" min="2" max="8">
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row" *ngIf="tournamentRulesForm?.get('tournamentType')?.value === tournamentTypes.CHAMPIONSHIP">
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre d'équipes</mat-label>
+              <input matInput type="number" formControlName="numberOfTeams" required min="4" max="32">
+              <mat-error *ngIf="tournamentRulesForm?.get('numberOfTeams')?.hasError('required')">
+                Le nombre d'équipes est requis
+              </mat-error>
+              <mat-error *ngIf="tournamentRulesForm?.get('numberOfTeams')?.hasError('min')">
+                Minimum 4 équipes
+              </mat-error>
+              <mat-error *ngIf="tournamentRulesForm?.get('numberOfTeams')?.hasError('max')">
+                Maximum 32 équipes
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Fréquence des rounds (jours)</mat-label>
+              <input matInput type="number" formControlName="roundFrequency" required min="1">
+              <mat-error *ngIf="tournamentRulesForm?.get('roundFrequency')?.hasError('required')">
+                La fréquence des rounds est requise
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <h3>Structure des équipes</h3>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Effectif principal</mat-label>
+              <input matInput type="number" formControlName="mainRoster" required min="1">
+              <mat-error *ngIf="tournamentRulesForm?.get('mainRoster')?.hasError('required')">
+                L'effectif principal est requis
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Composition de match</mat-label>
+              <input matInput type="number" formControlName="matchLineup" required min="1">
+              <mat-error *ngIf="tournamentRulesForm?.get('matchLineup')?.hasError('required')">
+                La composition de match est requise
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Remplaçants</mat-label>
+              <input matInput type="number" formControlName="substitutes" required min="0">
+              <mat-error *ngIf="tournamentRulesForm?.get('substitutes')?.hasError('required')">
+                Le nombre de remplaçants est requis
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <h3>Règles de match</h3>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Durée de match (min)</mat-label>
+              <input matInput type="number" formControlName="matchDuration" required min="0">
+              <mat-error *ngIf="tournamentRulesForm?.get('matchDuration')?.hasError('required')">
+                La durée de match est requise
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Durée de mi-temps (min)</mat-label>
+              <input matInput type="number" formControlName="halftime" required min="0">
+              <mat-error *ngIf="tournamentRulesForm?.get('halftime')?.hasError('required')">
+                La durée de mi-temps est requise
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-checkbox formControlName="isOverTimeRequired">Prolongations requises</mat-checkbox>
+          </div>
+          
+          <div class="form-row" *ngIf="tournamentRulesForm?.get('isOverTimeRequired')?.value">
+            <mat-form-field appearance="outline">
+              <mat-label>Durée des prolongations (min)</mat-label>
+              <input matInput type="number" formControlName="overTimeDuration" min="1">
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-checkbox formControlName="videoReview">Assistance vidéo</mat-checkbox>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <div class="form-actions">
+        <button mat-button type="button" routerLink="/tournaments" [disabled]="isSubmitting">Annuler</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="tournamentForm.invalid || isSubmitting">
+          <mat-spinner diameter="20" *ngIf="isSubmitting"></mat-spinner>
+          <span *ngIf="!isSubmitting">Créer le tournoi</span>
+        </button>
+      </div>
+    </form>
+    
+    <div *ngIf="tournamentForm.errors?.['invalidTournamentDates'] && 
+        (tournamentForm.get('startDate')?.touched || 
+         tournamentForm.get('endDate')?.touched || 
+         tournamentForm.get('teamRegistrationDeadline')?.touched)" 
+         class="form-error-global" role="alert" aria-live="polite">
+      ⚠️ Vérifiez les dates :
+      <ul>
+        <li>La date de fin doit être postérieure à la date de début</li>
+        <li>La date limite d'inscription doit être au moins 3 semaines avant la date de début</li>
+      </ul>
+    </div>
+  </div>
