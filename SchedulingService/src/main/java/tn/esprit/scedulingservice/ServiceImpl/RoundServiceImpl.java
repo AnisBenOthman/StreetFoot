@@ -38,6 +38,7 @@ public class RoundServiceImpl implements RoundService {
             round.setRoundDate(object.getRoundDate());
             round.setRoundNumber(object.getRoundNumber());
             round.setTournamentId(object.getTournamentId());
+            round.setStatus(object.getStatus());
             return roundRepository.save(round);
         }).orElseThrow(() -> new EntityNotFoundException("Round with id " + s + "not found"));
     }

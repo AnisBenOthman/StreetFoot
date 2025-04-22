@@ -17,5 +17,5 @@ public class MatchSchedule extends BaseEntity{
     String Stadium;
     long homeTeamId;
     long awayTeamId;
-    Status status;
+
 }

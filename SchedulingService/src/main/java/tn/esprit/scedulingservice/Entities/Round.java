@@ -18,5 +18,6 @@ public class Round extends BaseEntity{
     long tournamentId;
     Integer roundNumber;
     LocalDate roundDate;
+    Status status;
 
 }

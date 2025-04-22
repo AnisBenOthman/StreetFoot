@@ -36,7 +36,7 @@ public class MatchSceduleServiceImp implements MatchSceduleService {
     public MatchSchedule update(MatchSchedule object, String s) {
 
         return matchSceduleRepository.findById(s).map(m -> {
-            m.setStatus(object.getStatus());
+
             m.setHomeTeamId(object.getHomeTeamId());
             m.setAwayTeamId(object.getAwayTeamId());
             m.setStadium(object.getStadium());

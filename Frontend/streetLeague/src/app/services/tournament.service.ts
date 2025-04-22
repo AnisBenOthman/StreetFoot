@@ -29,4 +29,7 @@ export class TournamentService {
       this.apiUrl + 'gettournamentbystatus/' + status
     );
   }
+  getTournamentById(id: number): Observable<Tournament> {
+    return this.http.get<Tournament>(this.apiUrl + 'gettournamentbyid/' + id);
+  }
 }
