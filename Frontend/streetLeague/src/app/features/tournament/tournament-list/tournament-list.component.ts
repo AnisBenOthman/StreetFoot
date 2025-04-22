@@ -10,14 +10,19 @@ import { TournamentService } from 'src/app/services/tournament.service';
 })
 export class TournamentListComponent {
   tournaments: Tournament[] = [];
+  allTournaments: Tournament[] = [];
+
   constructor(private tournamentService: TournamentService) {}
+
   ngOnInit(): void {
     this.getTournaments();
   }
+
   getTournaments(): void {
     this.tournamentService.getTournaments().subscribe({
       next: (data) => {
-        this.tournaments = data;
+        this.allTournaments = data;
+        this.tournaments = [...this.allTournaments];
         console.log('Tournaments fetched successfully:', this.tournaments);
       },
       error: (error) => {
@@ -25,6 +30,23 @@ export class TournamentListComponent {
       },
     });
   }
+
+  filterTournaments(status: string): void {
+    if (status === 'all') {
+      this.getTournaments();
+    } else {
+      this.tournamentService.gettournamentbystatus(status).subscribe({
+        next: (data) => {
+          this.tournaments = data;
+          console.log('Filtered tournaments:', this.tournaments);
+        },
+        error: (error) => {
+          console.error('Error filtering tournaments:', error);
+        },
+      });
+    }
+  }
+
   getStatusLabel(status: Status): string {
     switch (status) {
       case Status.PENDING:
@@ -35,7 +57,6 @@ export class TournamentListComponent {
         return 'Terminé';
       case Status.PLANNED:
         return 'Prévu';
-
       default:
         return 'Inconnu';
     }

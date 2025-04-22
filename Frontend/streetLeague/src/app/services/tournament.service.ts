@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class TournamentService {
-  apiUrl = 'http://127.0.0.1:8084/tournament/';
-  rulesApiUrl = 'http://127.0.0.1:8084/tournamentRules/';
+  apiUrl = 'http://127.0.0.1:8084/tournament-service/tournament/';
+  rulesApiUrl = 'http://127.0.0.1:8084/tournament-service/tournamentrules/';
   constructor(private http: HttpClient) {}
 
   getTournaments() {
@@ -23,5 +23,10 @@ export class TournamentService {
   }
   createTournamentRules(rules: TournamentRules): Observable<TournamentRules> {
     return this.http.post<TournamentRules>(this.rulesApiUrl + 'add', rules);
+  }
+  gettournamentbystatus(status: string): Observable<Tournament[]> {
+    return this.http.get<Tournament[]>(
+      this.apiUrl + 'gettournamentbystatus/' + status
+    );
   }
 }

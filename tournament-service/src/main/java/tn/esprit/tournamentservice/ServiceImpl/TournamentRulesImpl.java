@@ -44,7 +44,7 @@ public class TournamentRulesImpl implements TournamentRulesService {
             existingTournamentRules.setSubstitutes(tournamentRules.getSubstitutes());
             existingTournamentRules.setNumberOfTeams(tournamentRules.getNumberOfTeams());
             existingTournamentRules.setTeamsPerGroup(tournamentRules.getTeamsPerGroup());
-            existingTournamentRules.setOverTimeRequired(tournamentRules.isOverTimeRequired());
+            existingTournamentRules.setIsOverTimeRequired(tournamentRules.getIsOverTimeRequired());
             existingTournamentRules.setOverTimeDuration(tournamentRules.getOverTimeDuration());
             return tournamentRulesRepository.save(existingTournamentRules);
         }).orElseThrow(() -> new EntityNotFoundException("TournamentRules with id {} not found" + id));

@@ -33,8 +33,10 @@ public class TournamentController {
             Tournament createdTournament = tournamentImpl.add(tournament);
             return ResponseEntity.ok(createdTournament);
         } catch (TournamentException e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
         }catch (Exception e) {
+            e.printStackTrace();
             return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
         }
 

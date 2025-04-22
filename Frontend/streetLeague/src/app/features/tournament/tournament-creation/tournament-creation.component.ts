@@ -152,11 +152,30 @@ export class TournamentCreationComponent implements OnInit {
       ]);
   }
 
+  private sanitizeDates(data: any): any {
+    return {
+      ...data,
+      startDate: data.startDate
+        ? new Date(data.startDate).toISOString().split('T')[0]
+        : null,
+      endDate: data.endDate
+        ? new Date(data.endDate).toISOString().split('T')[0]
+        : null,
+      teamRegistrationDeadline: data.teamRegistrationDeadline
+        ? new Date(data.teamRegistrationDeadline).toISOString().split('T')[0]
+        : null,
+    };
+  }
+
   onSubmit(): void {
     if (this.tournamentForm.invalid || this.isSubmitting) return;
 
     this.isSubmitting = true;
-    const tournament = this.tournamentForm.value;
+    const tournament = this.sanitizeDates(this.tournamentForm.value);
+    console.log(
+      'Payload sent to /tournamentRules/add:',
+      tournament.tournamentRules
+    );
 
     this.tournamentService
       .createTournamentRules(tournament.tournamentRules)
@@ -169,7 +188,7 @@ export class TournamentCreationComponent implements OnInit {
       )
       .subscribe((rules) => {
         if (!rules) return;
-
+        delete rules.id;
         const newTournament = {
           name: tournament.name,
           description: tournament.description,
@@ -180,8 +199,9 @@ export class TournamentCreationComponent implements OnInit {
           tournamentRules: rules,
           status: Status.PENDING,
           participatingTeamIds: [],
-          userId: 1, // TODO: Get from auth service
+          userId: 1,
         };
+        console.log('Payload sent to /tournament/add:', newTournament);
 
         this.tournamentService
           .addTournament(newTournament)

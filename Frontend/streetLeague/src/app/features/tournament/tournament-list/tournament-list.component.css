@@ -4,8 +4,31 @@
     padding: 20px;
   }
   
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
   .actions {
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .left-actions, .right-actions {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .filter-button {
+    background-color: #f5f5f5;
+  }
+  
+  .status-chip {
+    margin: 0;
   }
   
   .tournaments-list {
@@ -71,4 +94,3 @@
   .status-cancelled {
     background-color: #F44336 !important;
   }
-  

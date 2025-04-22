@@ -1,4 +1,4 @@
 export enum TournamentType {
-  CHAMPIONSHIP,
-  GROUP_STAGE,
+  CHAMPIONSHIP = 'CHAMPIONSHIP',
+  GROUP_STAGE = 'GROUP_STAGE',
 }

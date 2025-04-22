@@ -40,7 +40,7 @@ public class TournamentRules extends BaseEntity{
     int matchLineup;
     int substitutes;
     //Match rules
-    boolean isOverTimeRequired;
+    Boolean isOverTimeRequired;
     Integer overTimeDuration;
     int matchDuration;
     // break duration
