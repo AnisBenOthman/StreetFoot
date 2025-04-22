@@ -23,7 +23,7 @@ import java.util.List;
 public class TournamentImpl implements TournamentService {
 
     private static final Logger log = LoggerFactory.getLogger(TournamentImpl.class);
-    TournamentRepository tournamentRepository;
+    final TournamentRepository tournamentRepository;
     final SchedulingClient schedulingClient;
 
     @Override

@@ -9,6 +9,6 @@ import tn.esprit.tournamentservice.Entities.Tournament;
 
 @FeignClient(name="ScedulingService")
 public interface SchedulingClient {
-    @PostMapping("scheduling/generateschedule")
+    @PostMapping("/scheduling/generateschedule")
     public ResponseEntity<?> generateScheduling(@RequestBody SchedulingRequest schedulingRequest);
 }

@@ -14,7 +14,9 @@ C:\Users\Anis\OneDrive - IP LABEL\Documents\ANIS_CONFIDENTIEL\COURS_ESPRIT\3éme
 C:\Users\Anis\OneDrive - IP LABEL\Documents\ANIS_CONFIDENTIEL\COURS_ESPRIT\3éme année\PI\StreetLeague\tournament-service\src\main\java\tn\esprit\tournamentservice\Entities\TournamentType.java
 C:\Users\Anis\OneDrive - IP LABEL\Documents\ANIS_CONFIDENTIEL\COURS_ESPRIT\3éme année\PI\StreetLeague\tournament-service\src\main\java\tn\esprit\tournamentservice\Repositories\TournamentRulesRepository.java
 C:\Users\Anis\OneDrive - IP LABEL\Documents\ANIS_CONFIDENTIEL\COURS_ESPRIT\3éme année\PI\StreetLeague\tournament-service\src\main\java\tn\esprit\tournamentservice\Entities\ChampionshipMode.java
+C:\Users\Anis\OneDrive - IP LABEL\Documents\ANIS_CONFIDENTIEL\COURS_ESPRIT\3éme année\PI\StreetLeague\tournament-service\src\main\java\tn\esprit\tournamentservice\FeignClient\SchedulingClient.java
 C:\Users\Anis\OneDrive - IP LABEL\Documents\ANIS_CONFIDENTIEL\COURS_ESPRIT\3éme année\PI\StreetLeague\tournament-service\src\main\java\tn\esprit\tournamentservice\Exception\GlobalExceptionHandler.java
 C:\Users\Anis\OneDrive - IP LABEL\Documents\ANIS_CONFIDENTIEL\COURS_ESPRIT\3éme année\PI\StreetLeague\tournament-service\src\main\java\tn\esprit\tournamentservice\ServiceImpl\TournamentImpl.java
+C:\Users\Anis\OneDrive - IP LABEL\Documents\ANIS_CONFIDENTIEL\COURS_ESPRIT\3éme année\PI\StreetLeague\tournament-service\src\main\java\tn\esprit\tournamentservice\DTO\SchedulingRequest.java
 C:\Users\Anis\OneDrive - IP LABEL\Documents\ANIS_CONFIDENTIEL\COURS_ESPRIT\3éme année\PI\StreetLeague\tournament-service\src\main\java\tn\esprit\tournamentservice\Controller\TournamentRulesController.java
 C:\Users\Anis\OneDrive - IP LABEL\Documents\ANIS_CONFIDENTIEL\COURS_ESPRIT\3éme année\PI\StreetLeague\tournament-service\src\main\java\tn\esprit\tournamentservice\Entities\TournamentRules.java

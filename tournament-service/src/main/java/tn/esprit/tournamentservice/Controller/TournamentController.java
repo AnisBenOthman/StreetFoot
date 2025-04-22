@@ -92,6 +92,7 @@ public class TournamentController {
         try{
             return ResponseEntity.ok(tournamentImpl.getAll());
         }catch (Exception e){
+            e.printStackTrace();
             return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
         }
     }
