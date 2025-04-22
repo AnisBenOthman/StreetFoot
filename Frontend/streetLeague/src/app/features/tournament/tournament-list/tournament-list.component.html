@@ -62,6 +62,12 @@
                     </div>
                 </div>
             </mat-card-content>
+            <mat-card-actions align="end">
+                <button mat-raised-button color="primary" (click)="$event.stopPropagation()">
+                    <mat-icon>group_add</mat-icon>
+                    Participer
+                </button>
+            </mat-card-actions>
         </mat-card>
         
         <div *ngIf="tournaments.length === 0" class="no-tournaments">

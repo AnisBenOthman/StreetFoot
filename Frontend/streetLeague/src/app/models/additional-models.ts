@@ -1,17 +1,16 @@
-export interface AdditionalModels {
-    export interface Round {
-        id?: number;
-        roundNumber: number;
-        startDate: Date;
-        endDate: Date;
-        matches: Match[];
-        tournamentId: number;
-      }
-      
-      export interface Group {
-        id?: number;
-        name: string;
-        teams: number[];
-        tournamentId: number;
-      }
+import { Status } from './status';
+
+export interface Round {
+  tournamentId: string;
+  roundNumber: number;
+  roundDate: Date;
+  status: Status;
+}
+
+export interface Match {
+  matchId: string;
+  roundId: string;
+  homeTeamId?: number;
+  awayTeamId?: number;
+  StaduimId?: string;
 }

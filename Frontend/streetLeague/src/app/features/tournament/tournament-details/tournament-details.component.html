@@ -1,1 +1,150 @@
-<p>tournament-details works!</p>
+<div class="container">
+  <h1 class="mat-headline-4">Détails du Tournoi</h1>
+  
+  <div *ngIf="tournament" class="tournament-details">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ tournament.name }}</mat-card-title>
+        <mat-card-subtitle>
+          <mat-chip-set>
+            <mat-chip [ngClass]="getStatusClass(tournament.status)">{{ getStatusLabel(tournament.status) }}</mat-chip>
+            <mat-chip>{{ tournament.tournamentRules.tournamentType }}</mat-chip>
+          </mat-chip-set>
+        </mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <p class="description">{{ tournament.description }}</p>
+        
+        <mat-divider></mat-divider>
+        
+        <div class="info-section">
+          <h2>Informations générales</h2>
+          
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Date de début:</span>
+              <span class="value">{{ tournament.startDate | date:'dd/MM/yyyy' }}</span>
+            </div>
+            
+            <div class="info-item">
+              <span class="label">Date de fin:</span>
+              <span class="value">{{ tournament.endDate | date:'dd/MM/yyyy' }}</span>
+            </div>
+            
+            <div class="info-item">
+              <span class="label">Date limite d'inscription:</span>
+              <span class="value">{{ tournament.teamRegistrationDeadline | date:'dd/MM/yyyy' }}</span>
+            </div>
+            
+            <div class="info-item">
+              <span class="label">Récompenses:</span>
+              <span class="value">{{ tournament.awards || 'Non spécifié' }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <mat-divider></mat-divider>
+        
+        <div class="info-section">
+          <h2>Règles du tournoi</h2>
+          
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Type de tournoi:</span>
+              <span class="value">{{ getTournamentTypeLabel(tournament.tournamentRules.tournamentType) }}</span>
+            </div>
+            
+            <div class="info-item" *ngIf="tournament.tournamentRules.championshipMode">
+              <span class="label">Mode de championnat:</span>
+              <span class="value">{{ getChampionshipModeLabel(tournament.tournamentRules.championshipMode) }}</span>
+            </div>
+            
+            <div class="info-item" *ngIf="tournament.tournamentRules.numberOfGroups">
+              <span class="label">Nombre de groupes:</span>
+              <span class="value">{{ tournament.tournamentRules.numberOfGroups }}</span>
+            </div>
+            
+            <div class="info-item">
+              <span class="label">Nombre d'équipes:</span>
+              <span class="value">{{ tournament.participatingTeamIds.length }} / {{ tournament.tournamentRules.numberOfTeams }}</span>
+            </div>
+            
+            <div class="info-item">
+              <span class="label">Fréquence des rounds (jours):</span>
+              <span class="value">{{ tournament.tournamentRules.roundFrequency }}</span>
+            </div>
+            
+            <div class="info-item">
+              <span class="label">Effectif principal:</span>
+              <span class="value">{{ tournament.tournamentRules.mainRoster }}</span>
+            </div>
+            
+            <div class="info-item">
+              <span class="label">Composition de match:</span>
+              <span class="value">{{ tournament.tournamentRules.matchLineup }}</span>
+            </div>
+            
+            <div class="info-item">
+              <span class="label">Remplaçants:</span>
+              <span class="value">{{ tournament.tournamentRules.substitutes }}</span>
+            </div>
+            
+            <div class="info-item">
+              <span class="label">Durée de match (min):</span>
+              <span class="value">{{ tournament.tournamentRules.matchDuration }}</span>
+            </div>
+            
+            <div class="info-item">
+              <span class="label">Durée de mi-temps (min):</span>
+              <span class="value">{{ tournament.tournamentRules.halftime }}</span>
+            </div>
+            
+            <div class="info-item">
+              <span class="label">Prolongations:</span>
+              <span class="value">{{ tournament.tournamentRules.isOverTimeRequired ? 'Oui' : 'Non' }}</span>
+            </div>
+            
+            <div class="info-item" *ngIf="tournament.tournamentRules.isOverTimeRequired">
+              <span class="label">Durée des prolongations (min):</span>
+              <span class="value">{{ tournament.tournamentRules.overTimeDuration }}</span>
+            </div>
+            
+            <div class="info-item">
+              <span class="label">Assistance vidéo:</span>
+              <span class="value">{{ tournament.tournamentRules.videoReview ? 'Oui' : 'Non' }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <mat-divider></mat-divider>
+        
+        <div class="info-section">
+          <h2>IDs des équipes participantes</h2>
+          <div class="teams-list">
+            <mat-chip-set>
+              <mat-chip *ngFor="let teamId of tournament.participatingTeamIds">
+                {{ teamId }}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+          
+          <div *ngIf="tournament.participatingTeamIds.length === 0" class="no-teams">
+            <p>Aucune équipe inscrite pour le moment.</p>
+          </div>
+        </div>
+        
+        <mat-card-actions>
+          <button mat-button color="primary" routerLink="/tournaments">
+            <mat-icon>arrow_back</mat-icon> Retour à la liste
+          </button>
+        </mat-card-actions>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
+  <div *ngIf="!tournament" class="loading">
+    <mat-spinner></mat-spinner>
+    <p>Chargement des détails du tournoi...</p>
+  </div>
+</div>
