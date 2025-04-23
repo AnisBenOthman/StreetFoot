@@ -12,7 +12,14 @@
         <div class="right-actions">
             <button mat-raised-button [matMenuTriggerFor]="statusFilter">
                 <mat-icon>filter_list</mat-icon>
-                Filtrer par statut
+                <span class="filter-text">
+                    <span>{{ currentFilter === 'all' ? 'Tous les statuts' : 
+                       currentFilter === 'PENDING' ? 'En attente' :
+                       currentFilter === 'PLANNED' ? 'Prévu' :
+                       currentFilter === 'ONGOING' ? 'En cours' :
+                       currentFilter === 'FINISHED' ? 'Terminé' : 'Filtrer par statut' }}</span>
+                    <mat-chip *ngIf="currentFilter !== 'all'" [ngClass]="getStatusClass(currentFilter)"></mat-chip>
+                </span>
             </button>
             <mat-menu #statusFilter="matMenu">
                 <button mat-menu-item (click)="filterTournaments('all')">
@@ -54,7 +61,9 @@
                     </div>
                     <div class="detail-item">
                         <mat-icon>groups</mat-icon>
-                        <span>{{ tournament.participatingTeamIds.length }} / {{ tournament.tournamentRules.numberOfTeams }} équipes</span>
+                        <span>{{ tournament.participatingTeamIds.length }} / {{ tournament.tournamentRules.tournamentType === 'GROUP_STAGE' ? 
+                            (tournament.tournamentRules.numberOfGroups! * tournament.tournamentRules.teamsPerGroup!) : 
+                            tournament.tournamentRules.numberOfTeams }} équipes</span>
                     </div>
                     <div class="detail-item" *ngIf="tournament.awards">
                         <mat-icon>emoji_events</mat-icon>
@@ -63,9 +72,15 @@
                 </div>
             </mat-card-content>
             <mat-card-actions align="end">
-                <button mat-raised-button color="primary" (click)="$event.stopPropagation()">
+                <button mat-raised-button color="primary" 
+                        (click)="participateInTournament($event, tournament.id!)"
+                        [disabled]="tournament.status !== 'PENDING' || isTournamentFull(tournament)">
                     <mat-icon>group_add</mat-icon>
                     Participer
+                </button>
+                <button mat-raised-button color="warn" (click)="deleteTournament($event, tournament.id!)" *ngIf="tournament.id">
+                    <mat-icon>delete</mat-icon>
+                    Supprimer
                 </button>
             </mat-card-actions>
         </mat-card>

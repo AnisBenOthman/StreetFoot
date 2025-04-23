@@ -21,9 +21,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [ConfirmDialogComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -47,6 +49,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatToolbarModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    MatDialogModule,
   ],
   exports: [
     CommonModule,
@@ -71,6 +74,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatToolbarModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    MatDialogModule,
   ],
 })
 export class SharedModule {}

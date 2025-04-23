@@ -32,4 +32,16 @@ export class TournamentService {
   getTournamentById(id: number): Observable<Tournament> {
     return this.http.get<Tournament>(this.apiUrl + 'gettournamentbyid/' + id);
   }
+  deleteTournamentbyId(id: number): Observable<Tournament> {
+    return this.http.delete<Tournament>(this.apiUrl + 'deletetournament/' + id);
+  }
+  participateInTournament(
+    tournamentId: number,
+    teamId: number
+  ): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}participate/${tournamentId}/${teamId}`,
+      {}
+    );
+  }
 }
