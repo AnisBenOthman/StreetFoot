@@ -1,8 +1,10 @@
 package tn.esprit.scedulingservice.ServiceImpl;
 
-import jakarta.persistence.EntityNotFoundException;
+
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.scedulingservice.Entities.MatchSchedule;
 import tn.esprit.scedulingservice.Repositories.MatchSceduleRepository;
 import tn.esprit.scedulingservice.Service.MatchSceduleService;
@@ -41,7 +43,7 @@ public class MatchSceduleServiceImp implements MatchSceduleService {
             m.setAwayTeamId(object.getAwayTeamId());
             m.setStadium(object.getStadium());
             return matchSceduleRepository.save(m);
-        }).orElseThrow(() -> new EntityNotFoundException("Match with id " + s + "not found"));
+        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Match with id " + s + "not found"));
 
     }
 

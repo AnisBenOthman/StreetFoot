@@ -1,8 +1,10 @@
 package tn.esprit.scedulingservice.ServiceImpl;
 
-import jakarta.persistence.EntityNotFoundException;
+
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.scedulingservice.Entities.Round;
 import tn.esprit.scedulingservice.Repositories.RoundRepository;
 import tn.esprit.scedulingservice.Service.RoundService;
@@ -40,7 +42,7 @@ public class RoundServiceImpl implements RoundService {
             round.setTournamentId(object.getTournamentId());
             round.setStatus(object.getStatus());
             return roundRepository.save(round);
-        }).orElseThrow(() -> new EntityNotFoundException("Round with id " + s + "not found"));
+        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Round with id " + s + "not found"));
     }
 
     @Override

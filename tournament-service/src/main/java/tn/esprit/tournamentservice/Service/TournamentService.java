@@ -1,5 +1,6 @@
 package tn.esprit.tournamentservice.Service;
 
+import tn.esprit.tournamentservice.Entities.Sport;
 import tn.esprit.tournamentservice.Entities.Status;
 import tn.esprit.tournamentservice.Entities.Tournament;
 
@@ -9,6 +10,8 @@ public interface TournamentService extends BaseService<Tournament, Long> {
     List<Tournament> findByCreatedByUserId(Long userId);
     List<Tournament> findByStatus(Status status);
     public Tournament registerTeams(Long tournamentId, List<Integer> teamsId);
+    List<Tournament> findBySport(Sport sport);
+    Tournament participateINTournament(Long tournamentId, Integer teamId);
 
 
 }

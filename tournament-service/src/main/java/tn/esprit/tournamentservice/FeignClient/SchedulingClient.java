@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import tn.esprit.tournamentservice.DTO.SchedulingRequest;
 import tn.esprit.tournamentservice.Entities.Tournament;
 
-@FeignClient(name="ScedulingService")
+@FeignClient(name="sceduling-service")
 public interface SchedulingClient {
-    @PostMapping("/scheduling/generateschedule")
-    public ResponseEntity<?> generateScheduling(@RequestBody SchedulingRequest schedulingRequest);
+    @PostMapping("scheduling/generateschedule")
+    public void generateScheduling(@RequestBody SchedulingRequest schedulingRequest);
 }

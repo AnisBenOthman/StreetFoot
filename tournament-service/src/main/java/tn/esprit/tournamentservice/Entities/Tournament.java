@@ -41,6 +41,7 @@ public class Tournament extends BaseEntity{
     List<Integer> participatingTeamIds;
     String awards;
     Long userId;
+    Sport sport;
     @JsonIgnore
     @AssertTrue(message = "End date must be after start date")
     public boolean isEndDateAfterStartDate(){
@@ -54,10 +55,17 @@ public class Tournament extends BaseEntity{
     }
     @JsonIgnore
     public boolean isReadyForScheduling() {
-        return participatingTeamIds != null
-                && tournamentRules != null
-                || participatingTeamIds.size() == tournamentRules.getNumberOfTeams()|| participatingTeamIds.size() == tournamentRules.getNumberOfTeamsForGroupStage();
+        if (tournamentRules.getTournamentType() == TournamentType.CHAMPIONSHIP) {
+            return participatingTeamIds != null
+                    && participatingTeamIds.size() == tournamentRules.getNumberOfTeams();
+        } else { // GROUP_STAGE
+            int total = tournamentRules.getNumberOfGroups()
+                    * tournamentRules.getTeamsPerGroup();
+            return participatingTeamIds != null
+                    && participatingTeamIds.size() == total;
+        }
     }
+
 
 
 

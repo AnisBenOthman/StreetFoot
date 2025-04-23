@@ -1,5 +1,7 @@
+tn\esprit\scedulingservice\Controller\SchedulingControler.class
 tn\esprit\scedulingservice\Entities\Round.class
 tn\esprit\scedulingservice\ServiceImpl\RoundServiceImpl.class
+tn\esprit\scedulingservice\Controller\RoundController.class
 tn\esprit\scedulingservice\Service\RoundService.class
 tn\esprit\scedulingservice\Repositories\BaseRepository.class
 tn\esprit\scedulingservice\ServiceImpl\MatchSceduleServiceImp.class
@@ -14,5 +16,6 @@ tn\esprit\scedulingservice\Service\BaseService.class
 tn\esprit\scedulingservice\Service\SchedulingService.class
 tn\esprit\scedulingservice\ServiceImpl\SchedulingServiceImpl.class
 tn\esprit\scedulingservice\DTO\SchedulingRequest.class
+tn\esprit\scedulingservice\Controller\MatchSceduleController.class
 tn\esprit\scedulingservice\Entities\BaseEntity.class
 tn\esprit\scedulingservice\Entities\Round$RoundBuilder.class

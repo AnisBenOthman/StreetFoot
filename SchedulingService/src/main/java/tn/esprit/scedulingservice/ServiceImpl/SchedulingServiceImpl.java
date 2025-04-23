@@ -1,6 +1,7 @@
 package tn.esprit.scedulingservice.ServiceImpl;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.scedulingservice.DTO.SchedulingRequest;
 import tn.esprit.scedulingservice.Entities.MatchSchedule;
@@ -16,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class SchedulingServiceImpl implements SchedulingService {
     RoundRepository roundRepository;
@@ -35,6 +37,8 @@ public class SchedulingServiceImpl implements SchedulingService {
 
     @Override
     public void generateChampionshipSchedule(SchedulingRequest schedulingRequest) {
+        roundRepository.deleteAll();
+        matchSceduleRepository.deleteAll();
         int numberOfTeams = schedulingRequest.numberOfTeams();
         int numberOfRounds = numberOfTeams - 1;
         int matchesPerRound = numberOfTeams / 2;
@@ -43,30 +47,35 @@ public class SchedulingServiceImpl implements SchedulingService {
         LocalDate tournamentEndDate = schedulingRequest.endDate();
 
 
-        for (int roundNum = 1; roundNum < numberOfRounds; roundNum++) {
+        for (int roundNum = 1; roundNum <= numberOfRounds; roundNum++) {
+            log.info("les équipes du round n°" +roundNum +  "sont : {}",teamsId);
 
             Round roundSchedule = new Round();
             roundSchedule.setTournamentId(schedulingRequest.tournamentId());
             roundSchedule.setRoundNumber(roundNum);
             roundSchedule.setRoundDate(currentRoundDate);
+            roundSchedule.setStatus(Status.PLANNED);
             roundRepository.save(roundSchedule);
             List<MatchSchedule> roundMatches = new ArrayList<>();
             for (int match = 0; match < matchesPerRound; match++) {
                 int homeIndex = match;
                 int awayIndex = numberOfTeams - match - 1;
                 MatchSchedule matchSchedule = new MatchSchedule();
-                matchSchedule.setHomeTeamId(schedulingRequest.teams().get(homeIndex));
-                matchSchedule.setAwayTeamId(schedulingRequest.teams().get(awayIndex));
+                matchSchedule.setRoundId(roundSchedule.getId());
+                matchSchedule.setHomeTeamId(teamsId.get(homeIndex));
+                matchSchedule.setAwayTeamId(teamsId.get(awayIndex));
                 roundMatches.add(matchSchedule);
 
 
             }
+
+            matchSceduleRepository.saveAll(roundMatches);
             Integer pivot = teamsId.remove(0);
             Integer last = teamsId.remove(teamsId.size() - 1);
             teamsId.add(0, last);
             teamsId.add(0, pivot);
-            matchSceduleRepository.saveAll(roundMatches);
-            currentRoundDate.plusDays(schedulingRequest.roundFrequency());
+
+             currentRoundDate = currentRoundDate.plusDays(schedulingRequest.roundFrequency());
         }
     }
 
@@ -115,7 +124,6 @@ public class SchedulingServiceImpl implements SchedulingService {
                     match.setRoundId(globalRound.getId());
                     match.setHomeTeamId(home);
                     match.setAwayTeamId(away);
-                    match.setStatus(Status.PLANNED);
                     matchSceduleRepository.save(match);
                 }
             }

@@ -1,6 +1,7 @@
 package tn.esprit.scedulingservice.Controller;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.scedulingservice.Entities.Round;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/round-scedules")
+@RequestMapping("round-schedules")
 @AllArgsConstructor
 public class RoundController {
     @GetMapping("getroundbyid/{id}")
@@ -64,5 +65,5 @@ public class RoundController {
 
     }
 
-    RoundServiceImpl roundService;
+     RoundServiceImpl roundService;
 }

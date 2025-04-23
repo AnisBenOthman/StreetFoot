@@ -7,7 +7,7 @@ import tn.esprit.scedulingservice.DTO.SchedulingRequest;
 import tn.esprit.scedulingservice.ServiceImpl.SchedulingServiceImpl;
 
 @RestController
-@RequestMapping("Scheduling")
+@RequestMapping("scheduling")
 @AllArgsConstructor
 public class SchedulingControler {
     @PostMapping("generateschedule")

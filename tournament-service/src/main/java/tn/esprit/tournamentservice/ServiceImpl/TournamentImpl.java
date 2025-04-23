@@ -3,12 +3,15 @@ package tn.esprit.tournamentservice.ServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.tournamentservice.DTO.SchedulingRequest;
+import tn.esprit.tournamentservice.Entities.Sport;
 import tn.esprit.tournamentservice.Entities.Status;
 import tn.esprit.tournamentservice.Entities.Tournament;
 
 
+import tn.esprit.tournamentservice.Entities.TournamentType;
 import tn.esprit.tournamentservice.Exception.TournamentException;
 import tn.esprit.tournamentservice.FeignClient.SchedulingClient;
 import tn.esprit.tournamentservice.Repositories.TournamentRepository;
@@ -16,13 +19,15 @@ import tn.esprit.tournamentservice.Service.TournamentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class TournamentImpl implements TournamentService {
 
-    private static final Logger log = LoggerFactory.getLogger(TournamentImpl.class);
+
     final TournamentRepository tournamentRepository;
     final SchedulingClient schedulingClient;
 
@@ -47,6 +52,10 @@ public class TournamentImpl implements TournamentService {
                 exstingTournament.setStatus(tournament.getStatus());
                 exstingTournament.setEndDate(tournament.getEndDate());
                 exstingTournament.setStartDate(tournament.getStartDate());
+                exstingTournament.setParticipatingTeamIds(tournament.getParticipatingTeamIds());
+                exstingTournament.setAwards(tournament.getAwards());
+                exstingTournament.setSport(tournament.getSport());
+                exstingTournament.setUserId(tournament.getUserId());
                 return tournamentRepository.save(exstingTournament);
             }).orElseThrow(() -> new EntityNotFoundException("Tournament with id " + id + "not found"));
 
@@ -114,5 +123,45 @@ public class TournamentImpl implements TournamentService {
             schedulingClient.generateScheduling(req);
         }
         return tournament;
+    }
+
+    @Override
+    public List<Tournament> findBySport(Sport sport) {
+        return tournamentRepository.findBySport(sport);
+    }
+
+    @Override
+    public Tournament participateINTournament(Long tournamentId, Integer teamId) {
+        Tournament tournament = tournamentRepository.findById(tournamentId).orElseThrow(() -> new EntityNotFoundException(("Tournament with id" + tournamentId + "not found")));
+        List<Integer> teamsIds = tournament.getParticipatingTeamIds();
+        if(teamsIds == null){
+            teamsIds = new ArrayList<>();
+        }
+        if(tournament.getTournamentRules().getTournamentType() == TournamentType.CHAMPIONSHIP){
+            if (teamsIds.size() >= tournament.getTournamentRules().getNumberOfTeams()) {
+                throw new IllegalStateException("Le nombre maximal d'équipes a déjà été atteint");
+            }
+        }
+        if(tournament.getTournamentRules().getTournamentType() == TournamentType.GROUP_STAGE){
+            if (teamsIds.size() >=  tournament.getTournamentRules().getNumberOfGroups() * tournament.getTournamentRules().getTeamsPerGroup()) {
+                throw new IllegalStateException("Le nombre maximal d'équipes a déjà été atteint");
+            }
+
+        }
+
+
+        if(!teamsIds.contains(teamId)){
+            teamsIds.add(teamId);
+        }else{
+            throw new IllegalStateException("Cette équipe est déja inscrite au tournoi !");
+        }
+        Tournament saved = tournamentRepository.save(tournament);
+        if(saved.isReadyForScheduling()){
+            SchedulingRequest req = new SchedulingRequest(saved.getId(),saved.getTournamentRules().getTournamentType().toString(),saved.getTournamentRules().getChampionshipMode().toString(),saved.getTournamentRules().getNumberOfTeams(),tournament.getTournamentRules().getNumberOfGroups(),saved.getTournamentRules().getTeamsPerGroup(),saved.getParticipatingTeamIds(),saved.getTournamentRules().getRoundFrequency(),saved.getStartDate(),saved.getEndDate());
+            log.info("requete sent is : {}", req);
+            schedulingClient.generateScheduling(req);
+        }
+        return saved;
+
     }
 }

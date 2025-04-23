@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.tournamentservice.Entities.Sport;
 import tn.esprit.tournamentservice.Entities.Status;
 import tn.esprit.tournamentservice.Entities.Tournament;
 import tn.esprit.tournamentservice.Exception.TournamentException;
@@ -104,6 +105,7 @@ public class TournamentController {
             tournamentImpl.deleteAll();
             return ResponseEntity.ok(Map.of("message", "All Tournaments deleted successfully"));
         } catch (Exception e) {
+            e.printStackTrace();
             return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
         }
     }
@@ -114,6 +116,7 @@ public class TournamentController {
         } catch (EntityNotFoundException e) {
             return buildErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
         }
     }
@@ -123,6 +126,7 @@ public class TournamentController {
         try {
             return ResponseEntity.ok(tournamentImpl.findByStatus(status));
         } catch (Exception e) {
+            e.printStackTrace();
             return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
         }
     }
@@ -131,6 +135,21 @@ public class TournamentController {
     public ResponseEntity<Tournament> registerTeams(@PathVariable Long tournamentId, @RequestBody List<Integer> teamsId) {
         Tournament tournament = tournamentImpl.registerTeams(tournamentId, teamsId);
         return ResponseEntity.ok(tournament);
+    }
+
+    public ResponseEntity<List<Tournament>> findBySport(Sport sport) {
+        List<Tournament> list = tournamentImpl.findBySport(sport);
+        return ResponseEntity.ok(list);
+    }
+    @PutMapping("addparticipant/{tournamentId}/{teamId}")
+    public ResponseEntity<?> participateINTournament(@PathVariable Long tournamentId, @PathVariable Integer teamId) {
+        try{
+            return ResponseEntity.ok(tournamentImpl.participateINTournament(tournamentId, teamId)) ;
+        }catch (Exception e){
+            e.printStackTrace();
+            return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
+        }
+
     }
 
     TournamentImpl tournamentImpl;

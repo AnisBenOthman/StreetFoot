@@ -104,7 +104,7 @@ export class TournamentListComponent {
           .subscribe({
             next: () => {
               console.log('Successfully joined tournament');
-              this.getTournaments(); // Rafraîchir la liste pour mettre à jour le nombre d'équipes
+              this.getTournaments(); 
             },
             error: (error) => {
               console.error('Error joining tournament:', error);
@@ -155,7 +155,7 @@ export class TournamentListComponent {
         tournament.tournamentRules.teamsPerGroup!;
       return tournament.participatingTeamIds.length >= maxTeams;
     } else {
-      // Pour le type CHAMPIONSHIP
+      
       return (
         tournament.participatingTeamIds.length >=
         tournament.tournamentRules.numberOfTeams
