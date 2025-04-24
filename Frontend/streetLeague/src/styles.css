@@ -21,3 +21,17 @@ main {
 .mat-mdc-card {
   margin-bottom: 16px;
 }
+
+.success-snackbar {
+  background: #4caf50;
+  color: white;
+}
+
+.error-snackbar {
+  background: #f44336;
+  color: white;
+}
+
+.success-snackbar .mat-simple-snackbar-action, .error-snackbar .mat-simple-snackbar-action {
+  color: white;
+}

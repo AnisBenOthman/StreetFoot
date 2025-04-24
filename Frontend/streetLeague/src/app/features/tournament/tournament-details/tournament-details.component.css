@@ -74,20 +74,31 @@
   margin: 16px 0;
 }
 
-.mat-column-date {
-  width: 20%;
+.matches-container {
+  margin: 16px 0;
 }
 
-.mat-column-teams {
-  width: 40%;
+.no-teams, .no-rounds, .no-matches {
+  text-align: center;
+  padding: 24px;
+  color: rgba(0, 0, 0, 0.6);
 }
 
-.mat-column-location {
-  width: 20%;
+mat-expansion-panel {
+  margin-bottom: 16px;
 }
 
-.mat-column-status {
-  width: 20%;
+mat-expansion-panel-header {
+  padding: 16px;
+}
+
+mat-panel-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+mat-panel-description {
+  justify-content: flex-end;
 }
 
 .loading {
@@ -122,16 +133,6 @@ mat-divider {
 .status-cancelled {
   background-color: #ff5252 !important;
   color: white !important;
-}
-
-.no-teams, .no-rounds {
-  text-align: center;
-  padding: 24px;
-  color: rgba(0, 0, 0, 0.6);
-}
-
-mat-expansion-panel {
-  margin-bottom: 16px;
 }
 
 mat-card-actions {

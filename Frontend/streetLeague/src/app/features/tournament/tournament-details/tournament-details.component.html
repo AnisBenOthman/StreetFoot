@@ -8,7 +8,8 @@
         <mat-card-subtitle>
           <mat-chip-set>
             <mat-chip [ngClass]="getStatusClass(tournament.status)">{{ getStatusLabel(tournament.status) }}</mat-chip>
-            <mat-chip>{{ tournament.tournamentRules.tournamentType }}</mat-chip>
+            <mat-chip>{{ getTournamentTypeLabel(tournament.tournamentRules.tournamentType) }}</mat-chip>
+            <mat-chip>{{ getSportLabel(tournament.sport) }}</mat-chip>
           </mat-chip-set>
         </mat-card-subtitle>
       </mat-card-header>
@@ -23,13 +24,13 @@
           
           <div class="info-grid">
             <div class="info-item">
-              <span class="label">Date de début:</span>
-              <span class="value">{{ tournament.startDate | date:'dd/MM/yyyy' }}</span>
+              <span class="label">Sport:</span>
+              <span class="value">{{ getSportLabel(tournament.sport) }}</span>
             </div>
-            
+
             <div class="info-item">
-              <span class="label">Date de fin:</span>
-              <span class="value">{{ tournament.endDate | date:'dd/MM/yyyy' }}</span>
+              <span class="label">Dates:</span>
+              <span class="value">Du {{ tournament.startDate | date:'dd/MM/yyyy' }} au {{ tournament.endDate | date:'dd/MM/yyyy' }}</span>
             </div>
             
             <div class="info-item">
@@ -63,6 +64,11 @@
             <div class="info-item" *ngIf="tournament.tournamentRules.numberOfGroups">
               <span class="label">Nombre de groupes:</span>
               <span class="value">{{ tournament.tournamentRules.numberOfGroups }}</span>
+            </div>
+            
+            <div class="info-item" *ngIf="tournament.tournamentRules.teamsPerGroup">
+              <span class="label">Équipes par groupe:</span>
+              <span class="value">{{ tournament.tournamentRules.teamsPerGroup }}</span>
             </div>
             
             <div class="info-item">
@@ -131,6 +137,63 @@
           
           <div *ngIf="tournament.participatingTeamIds.length === 0" class="no-teams">
             <p>Aucune équipe inscrite pour le moment.</p>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-section">
+          <h2>Rounds et Matches</h2>
+          <div *ngIf="rounds.length > 0">
+            <mat-accordion>
+              <mat-expansion-panel *ngFor="let round of rounds">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Round {{ round.roundNumber }}
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <mat-chip-set>
+                      <mat-chip [ngClass]="getStatusClass(round.status)">
+                        {{ getStatusLabel(round.status) }}
+                      </mat-chip>
+                      <mat-chip>{{ round.roundDate | date:'dd/MM/yyyy' }}</mat-chip>
+                    </mat-chip-set>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="matches-container">
+                  <table mat-table [dataSource]="getRoundMatches(round.id)" class="matches-table">
+                    <ng-container matColumnDef="matchId">
+                      <th mat-header-cell *matHeaderCellDef> ID Match </th>
+                      <td mat-cell *matCellDef="let match">{{match.matchId}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="teams">
+                      <th mat-header-cell *matHeaderCellDef> Équipes </th>
+                      <td mat-cell *matCellDef="let match">
+                        {{match.homeTeamId || 'TBD'}} vs {{match.awayTeamId || 'TBD'}}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="stadium">
+                      <th mat-header-cell *matHeaderCellDef> Stade </th>
+                      <td mat-cell *matCellDef="let match">{{match.stadium || 'Non défini'}}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+
+                  <div *ngIf="getRoundMatches(round.id).length === 0" class="no-matches">
+                    <p>Aucun match programmé pour ce round.</p>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+
+          <div *ngIf="rounds.length === 0" class="no-rounds">
+            <p>Aucun round n'a encore été créé pour ce tournoi.</p>
           </div>
         </div>
         

@@ -24,6 +24,23 @@
               <textarea matInput formControlName="description" rows="3"></textarea>
             </mat-form-field>
           </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Sport</mat-label>
+              <mat-select formControlName="sport" required>
+                <mat-option [value]="sports.FOOTBALL">Football</mat-option>
+                <mat-option [value]="sports.HANDBALL">Handball</mat-option>
+                <mat-option [value]="sports.BASKETBALL">Basketball</mat-option>
+                <mat-option [value]="sports.TENNIS">Tennis</mat-option>
+                <mat-option [value]="sports.VOLLEYBALL">Volleyball</mat-option>
+                <mat-option [value]="sports.OTHER">Autre</mat-option>
+              </mat-select>
+              <mat-error *ngIf="tournamentForm.get('sport')?.hasError('required')">
+                Le type de sport est requis
+              </mat-error>
+            </mat-form-field>
+          </div>
           
           <div class="form-row date-row">
             <mat-form-field appearance="outline">

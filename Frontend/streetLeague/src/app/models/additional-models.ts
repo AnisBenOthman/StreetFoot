@@ -1,16 +1,21 @@
 import { Status } from './status';
 
-export interface Round {
-  tournamentId: string;
+export interface BaseEntity {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Round extends BaseEntity {
+  tournamentId: number;
   roundNumber: number;
   roundDate: Date;
   status: Status;
 }
 
-export interface Match {
-  matchId: string;
+export interface Match extends BaseEntity {
   roundId: string;
-  homeTeamId?: number;
-  awayTeamId?: number;
-  StaduimId?: string;
+  stadium: string;
+  homeTeamId: number;
+  awayTeamId: number;
 }

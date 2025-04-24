@@ -39,8 +39,8 @@ export class TournamentService {
     tournamentId: number,
     teamId: number
   ): Observable<any> {
-    return this.http.post<any>(
-      `${this.apiUrl}participate/${tournamentId}/${teamId}`,
+    return this.http.put<any>(
+      `${this.apiUrl}addparticipant/${tournamentId}/${teamId}`,
       {}
     );
   }

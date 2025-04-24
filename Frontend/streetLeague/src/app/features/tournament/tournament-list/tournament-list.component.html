@@ -10,20 +10,51 @@
             </button>
         </div>
         <div class="right-actions">
-            <button mat-raised-button [matMenuTriggerFor]="statusFilter">
+            <!-- Sport Filter -->
+            <button mat-raised-button [matMenuTriggerFor]="sportFilter" class="filter-button">
+                <mat-icon>sports</mat-icon>
+                <span class="filter-text">
+                    {{ currentSportFilter === 'all' ? 'Tous les sports' : getSportLabel(currentSportFilter) }}
+                </span>
+            </button>
+            <mat-menu #sportFilter="matMenu">
+                <button mat-menu-item (click)="filterTournamentsBySport('all')">
+                    <mat-chip>Tous les sports</mat-chip>
+                </button>
+                <button mat-menu-item (click)="filterTournamentsBySport(sports.FOOTBALL)">
+                    <mat-chip>Football</mat-chip>
+                </button>
+                <button mat-menu-item (click)="filterTournamentsBySport(sports.HANDBALL)">
+                    <mat-chip>Handball</mat-chip>
+                </button>
+                <button mat-menu-item (click)="filterTournamentsBySport(sports.BASKETBALL)">
+                    <mat-chip>Basketball</mat-chip>
+                </button>
+                <button mat-menu-item (click)="filterTournamentsBySport(sports.TENNIS)">
+                    <mat-chip>Tennis</mat-chip>
+                </button>
+                <button mat-menu-item (click)="filterTournamentsBySport(sports.VOLLEYBALL)">
+                    <mat-chip>Volleyball</mat-chip>
+                </button>
+                <button mat-menu-item (click)="filterTournamentsBySport(sports.OTHER)">
+                    <mat-chip>Autre</mat-chip>
+                </button>
+            </mat-menu>
+
+            <!-- Status Filter -->
+            <button mat-raised-button [matMenuTriggerFor]="statusFilter" class="filter-button">
                 <mat-icon>filter_list</mat-icon>
                 <span class="filter-text">
-                    <span>{{ currentFilter === 'all' ? 'Tous les statuts' : 
+                    {{ currentFilter === 'all' ? 'Tous les statuts' : 
                        currentFilter === 'PENDING' ? 'En attente' :
                        currentFilter === 'PLANNED' ? 'Prévu' :
                        currentFilter === 'ONGOING' ? 'En cours' :
-                       currentFilter === 'FINISHED' ? 'Terminé' : 'Filtrer par statut' }}</span>
-                    <mat-chip *ngIf="currentFilter !== 'all'" [ngClass]="getStatusClass(currentFilter)"></mat-chip>
+                       'Terminé' }}
                 </span>
             </button>
             <mat-menu #statusFilter="matMenu">
                 <button mat-menu-item (click)="filterTournaments('all')">
-                    <span>Tous</span>
+                    <mat-chip>Tous les statuts</mat-chip>
                 </button>
                 <button mat-menu-item (click)="filterTournaments('PENDING')">
                     <mat-chip class="status-chip status-pending">En attente</mat-chip>
@@ -49,6 +80,7 @@
                     <mat-chip-set>
                         <mat-chip [ngClass]="getStatusClass(tournament.status)">{{ getStatusLabel(tournament.status) }}</mat-chip>
                         <mat-chip>{{ tournament.tournamentRules.tournamentType }}</mat-chip>
+                        <mat-chip>{{ getSportLabel(tournament.sport) }}</mat-chip>
                     </mat-chip-set>
                 </mat-card-subtitle>
             </mat-card-header>
@@ -87,7 +119,7 @@
         
         <div *ngIf="tournaments.length === 0" class="no-tournaments">
             <mat-icon>sports</mat-icon>
-            <p>Aucun tournoi disponible. Créez votre premier tournoi !</p>
+            <p>Aucun tournoi trouvé</p>
         </div>
     </div>
 </div>

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { ChampionshipMode } from 'src/app/models/championship-mode';
 import { Status } from 'src/app/models/status';
 import { TournamentType } from 'src/app/models/tournament-type';
+import { Sport } from 'src/app/models/sport';
 import { TournamentService } from 'src/app/services/tournament.service';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -24,6 +25,7 @@ export class TournamentCreationComponent implements OnInit {
   tournamentForm!: FormGroup;
   tournamentTypes = TournamentType;
   championshipModes = ChampionshipMode;
+  sports = Sport;
   isSubmitting = false;
 
   constructor(
@@ -43,6 +45,7 @@ export class TournamentCreationComponent implements OnInit {
       {
         name: ['', [Validators.required, Validators.minLength(3)]],
         description: [''],
+        sport: ['', [Validators.required]],
         startDate: [null, [Validators.required]],
         endDate: [null, [Validators.required]],
         teamRegistrationDeadline: [null, [Validators.required]],
@@ -192,6 +195,7 @@ export class TournamentCreationComponent implements OnInit {
         const newTournament = {
           name: tournament.name,
           description: tournament.description,
+          sport: tournament.sport,
           startDate: tournament.startDate,
           endDate: tournament.endDate,
           teamRegistrationDeadline: tournament.teamRegistrationDeadline,
