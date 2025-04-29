@@ -17,6 +17,24 @@ public class MatchSchedule extends BaseEntity{
     String stadium;
     long homeTeamId;
     long awayTeamId;
+    Integer homeScore;
+    Integer awayScore;
+    Long winnerTeamId;
+    public void computeResult() {
+        if (homeScore == null || awayScore == null) {
+            winnerTeamId = null;
+
+        } else if (homeScore > awayScore) {
+            winnerTeamId = homeTeamId;
+
+        } else if (awayScore > homeScore) {
+            winnerTeamId = awayTeamId;
+
+        } else {
+            winnerTeamId = null;
+
+        }
+    }
     public String getRoundId() { return roundId; }
     public void setRoundId(String roundId) { this.roundId = roundId; }
 

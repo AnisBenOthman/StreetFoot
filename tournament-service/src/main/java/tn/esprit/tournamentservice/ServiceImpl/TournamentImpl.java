@@ -157,6 +157,8 @@ public class TournamentImpl implements TournamentService {
         }
         Tournament saved = tournamentRepository.save(tournament);
         if(saved.isReadyForScheduling()){
+            saved.setStatus(Status.PLANNED);
+            tournamentRepository.save(saved);
             SchedulingRequest req = new SchedulingRequest(saved.getId(),saved.getTournamentRules().getTournamentType().toString(),saved.getTournamentRules().getChampionshipMode().toString(),saved.getTournamentRules().getNumberOfTeams(),tournament.getTournamentRules().getNumberOfGroups(),saved.getTournamentRules().getTeamsPerGroup(),saved.getParticipatingTeamIds(),saved.getTournamentRules().getRoundFrequency(),saved.getStartDate(),saved.getEndDate());
             log.info("requete sent is : {}", req);
             schedulingClient.generateScheduling(req);

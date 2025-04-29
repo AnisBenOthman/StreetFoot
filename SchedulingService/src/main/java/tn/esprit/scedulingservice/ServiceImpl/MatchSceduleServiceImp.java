@@ -42,6 +42,8 @@ public class MatchSceduleServiceImp implements MatchSceduleService {
             m.setHomeTeamId(object.getHomeTeamId());
             m.setAwayTeamId(object.getAwayTeamId());
             m.setStadium(object.getStadium());
+            m.setAwayScore(object.getAwayScore());
+            m.setHomeScore(object.getHomeScore());
             return matchSceduleRepository.save(m);
         }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Match with id " + s + "not found"));
 
