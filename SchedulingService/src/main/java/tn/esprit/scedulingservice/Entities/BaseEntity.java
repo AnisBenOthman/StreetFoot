@@ -15,7 +15,7 @@ public class BaseEntity implements Serializable {
     @Id
     @Setter(AccessLevel.NONE)
     String id;
-    LocalDate createdAt;
-    LocalDate updatedAt;
+    LocalDate createdAt = LocalDate.now();
+    LocalDate updatedAt = LocalDate.now();
     public String getId() { return id; }
 }

@@ -2,20 +2,26 @@ package tn.esprit.scedulingservice.ServiceImpl;
 
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.scedulingservice.Entities.MatchSchedule;
 import tn.esprit.scedulingservice.Repositories.MatchSceduleRepository;
+import tn.esprit.scedulingservice.Repositories.StandingRepository;
 import tn.esprit.scedulingservice.Service.MatchSceduleService;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MatchSceduleServiceImp implements MatchSceduleService {
-    MatchSceduleRepository matchSceduleRepository;
+    private final MatchSceduleRepository matchSceduleRepository;
+    private final Standingimpl standingimpl;
 
     @Override
     public Optional<MatchSchedule> retrieveById(String s) {
@@ -63,5 +69,17 @@ public class MatchSceduleServiceImp implements MatchSceduleService {
     @Override
     public List<MatchSchedule> findAllMatchByRound(String roundId) {
         return matchSceduleRepository.findByRoundId(roundId);
+    }
+
+    @Override
+    public MatchSchedule updateMatchScore( String matchId, int homeScore, int awayScore) {
+        MatchSchedule match = matchSceduleRepository.findById(matchId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Match with id " + matchId + "not found"));
+        match.setHomeScore(homeScore);
+        match.setAwayScore(awayScore);
+        match.computeResult();
+        matchSceduleRepository.save(match);
+        standingimpl.updateStandingsForMatch(match.getId());
+
+        return match;
     }
 }

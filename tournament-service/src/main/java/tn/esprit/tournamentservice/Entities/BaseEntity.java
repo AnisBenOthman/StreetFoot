@@ -20,7 +20,7 @@ public class BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     long id;
-    LocalDate createdAt;
-    LocalDate updatedAt;
+    LocalDate createdAt = LocalDate.now();
+    LocalDate updatedAt = LocalDate.now();
 
 }

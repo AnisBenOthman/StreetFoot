@@ -1,5 +1,6 @@
 package tn.esprit.scedulingservice.Controller;
 
+import jakarta.ws.rs.PUT;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,6 +66,18 @@ public class MatchSceduleController {
             List<MatchSchedule> list = matchSceduleServiceImp.findAllMatchByRound(roundId);
             return ResponseEntity.ok(list);
         }catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    @PutMapping("updatescore/{matchId}/{homeScore}/{awayScore}")
+    public ResponseEntity<MatchSchedule>  updateMatchScore(@PathVariable String matchId, @PathVariable int homeScore, @PathVariable int awayScore) {
+        try{
+            MatchSchedule match = matchSceduleServiceImp.updateMatchScore(matchId, homeScore, awayScore);
+            return ResponseEntity.ok(match);
+        }catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.notFound().build();
         }
 

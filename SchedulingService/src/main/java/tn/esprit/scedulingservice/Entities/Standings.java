@@ -14,11 +14,23 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @ToString
 public class Standings extends BaseEntity{
     Long tournamentId;
-    Integer teamId;
-
-    int matchesPlayed;
-    int wins;
-    int draws;
-    int losses;
-    int points;
+    Long teamId;
+    int goalScored=0;
+    int goalConceded=0;
+    int matchesPlayed=0;
+    int wins=0;
+    int draws=0;
+    int losses=0;
+    int points=0;
+    public Standings(Long tournamentId, Long teamId) {
+        this.tournamentId   = tournamentId;
+        this.teamId         = teamId;
+        this.matchesPlayed = 0;
+        this.wins           = 0;
+        this.draws          = 0;
+        this.losses         = 0;
+        this.goalScored     = 0;
+        this.goalConceded   = 0;
+        this.points         = 0;
+    }
 }

@@ -102,6 +102,7 @@ public class SchedulingServiceImpl implements SchedulingService {
             globalRound.setTournamentId(schedulingRequest.tournamentId());
             globalRound.setRoundNumber(roundIndex + 1);
             globalRound.setRoundDate(currentDate);
+            globalRound.setStatus(Status.PLANNED);
             roundRepository.save(globalRound);
 
             // Step 3: For each group, generate match pairings for this round
