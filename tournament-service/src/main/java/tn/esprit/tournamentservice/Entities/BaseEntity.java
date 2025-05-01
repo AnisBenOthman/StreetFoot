@@ -1,5 +1,6 @@
 package tn.esprit.tournamentservice.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,8 +20,11 @@ public class BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
+    @JsonIgnore
     long id;
+    @JsonIgnore
     LocalDate createdAt = LocalDate.now();
+    @JsonIgnore
     LocalDate updatedAt = LocalDate.now();
 
 }

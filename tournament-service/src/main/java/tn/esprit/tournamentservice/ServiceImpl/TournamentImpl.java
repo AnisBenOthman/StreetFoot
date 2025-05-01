@@ -4,6 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import tn.esprit.tournamentservice.DTO.SchedulingRequest;
 import tn.esprit.tournamentservice.Entities.Sport;
@@ -21,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
 @Service
@@ -30,11 +33,16 @@ public class TournamentImpl implements TournamentService {
 
     final TournamentRepository tournamentRepository;
     final SchedulingClient schedulingClient;
+    final KafkaTemplate<String,Object> kafkaTemplate;
 
     @Override
     public Tournament add(Tournament tournament) {
         try {
-            return tournamentRepository.save(tournament);
+            Tournament saved = tournamentRepository.save(tournament);
+            kafkaTemplate.send("tournament.generated", saved);
+            
+            return saved;
+
         } catch (Exception e) {
             log.error("Failed to save tournament: {}", tournament, e);
             throw new TournamentException("Failed to save tournament", e);
