@@ -1,5 +1,6 @@
 package tn.esprit.tournamentservice.ServiceImpl;
 
+import esprit.tn.shared.config.DTO.TournamentCreatedEvent;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,12 @@ import tn.esprit.tournamentservice.Service.TournamentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import esprit.tn.shared.config.EventEnvelop;
+
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
@@ -35,12 +40,22 @@ public class TournamentImpl implements TournamentService {
     final SchedulingClient schedulingClient;
     final KafkaTemplate<String,Object> kafkaTemplate;
 
+
     @Override
     public Tournament add(Tournament tournament) {
         try {
             Tournament saved = tournamentRepository.save(tournament);
-            kafkaTemplate.send("tournament.generated", saved);
-            
+            TournamentCreatedEvent evt = new TournamentCreatedEvent(saved.getId(),saved.getTournamentRules().getTournamentType().toString(),saved.getTournamentRules().getChampionshipMode().toString(),saved.getTournamentRules().getNumberOfTeams(),saved.getTournamentRules().getNumberOfGroups(),saved.getTournamentRules().getTeamsPerGroup(),saved.getParticipatingTeamIds(),saved.getTournamentRules().getRoundFrequency(),saved.getStartDate(),saved.getEndDate());
+             EventEnvelop<TournamentCreatedEvent> envelop = EventEnvelop.<TournamentCreatedEvent>builder()
+                     .eventId(UUID.randomUUID().toString())
+                    .type("TOURNAMENT_CREATED")
+                    .payload(evt)
+                    .timestamp(Instant.now())
+                    .build();
+
+
+            kafkaTemplate.send("tournament.generated", envelop );
+
             return saved;
 
         } catch (Exception e) {
