@@ -23,17 +23,19 @@ public class StandingImpl implements StandingService {
 
     @Override
     public Optional<Standings> retrieveById(String s) {
-        return Optional.empty();
+
+        return standingRepo.findById(s);
     }
 
     @Override
     public List<Standings> retrieveAll() {
-        return null;
+
+        return standingRepo.findAll();
     }
 
     @Override
     public Standings add(Standings object) {
-        return null;
+        return standingRepo.save(object);
     }
 
     @Override
@@ -43,6 +45,7 @@ public class StandingImpl implements StandingService {
 
     @Override
     public void delete(String s) {
+        standingRepo.deleteById(s);
 
     }
 
@@ -53,13 +56,14 @@ public class StandingImpl implements StandingService {
     }
 
     @Override
-    public Optional<List<Standings>> findByTournamentId(Long tournamentId) {
-        return Optional.empty();
+    public List<Standings> findByTournamentId(Long tournamentId) {
+        return standingRepo.findByTournamentId(tournamentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tournament with id " + tournamentId + "not found"));
     }
 
     @Override
-    public Optional<Standings> findByTournamentIdAndTeamId(Long tournamentId, Long teamId) {
-        return Optional.empty();
+    public Standings findByTournamentIdAndTeamId(Long tournamentId, Long teamId) {
+
+        return standingRepo.findByTournamentIdAndTeamId(tournamentId,teamId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id" + teamId + "not found"));
     }
 
     @KafkaListener(topics = "schedule.updatematchscore")

@@ -6,6 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StandingService extends BaseService<Standings,String> {
-    Optional<List<Standings>> findByTournamentId(Long tournamentId);
-    Optional<Standings>  findByTournamentIdAndTeamId(Long tournamentId, Long teamId);
+    List<Standings> findByTournamentId(Long tournamentId);
+    Standings  findByTournamentIdAndTeamId(Long tournamentId, Long teamId);
 }

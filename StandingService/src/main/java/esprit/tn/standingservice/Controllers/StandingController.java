@@ -4,11 +4,9 @@ import esprit.tn.shared.config.DTO.MatchScoreUpdateEvent;
 import esprit.tn.standingservice.Entities.Standings;
 import esprit.tn.standingservice.ServiceImp.StandingImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,13 +38,15 @@ public class StandingController {
     public void deleteAll() {
         standingImp.deleteAll();
     }
-
-    public Optional<List<Standings>> findByTournamentId(Long tournamentId) {
-        return standingImp.findByTournamentId(tournamentId);
+@GetMapping("getstandingoftournament/{tournamentId}")
+    public ResponseEntity<List<Standings> > findByTournamentId(@PathVariable Long tournamentId) {
+        List<Standings> list = standingImp.findByTournamentId(tournamentId);
+        return ResponseEntity.ok(list);
     }
-
-    public Optional<Standings> findByTournamentIdAndTeamId(Long tournamentId, Long teamId) {
-        return standingImp.findByTournamentIdAndTeamId(tournamentId, teamId);
+@GetMapping("getstandingfortournamentandteam/{tournamentId}/{teamId}")
+    public ResponseEntity<Standings>  findByTournamentIdAndTeamId(@PathVariable Long tournamentId, @PathVariable Long teamId) {
+        Standings saved = standingImp.findByTournamentIdAndTeamId(tournamentId, teamId);
+        return ResponseEntity.ok(saved);
     }
 
 
