@@ -1,11 +1,15 @@
 package esprit.tn.standingservice.ServiceImp;
 
 import esprit.tn.shared.config.DTO.MatchScoreUpdateEvent;
+import esprit.tn.shared.config.DTO.ScheduleGeneratedEvent;
+import esprit.tn.shared.config.DTO.TournamentCreatedEvent;
 import esprit.tn.shared.config.EventEnvelop;
 import esprit.tn.standingservice.Entities.Standings;
 import esprit.tn.standingservice.Repositories.StandingRepo;
 import esprit.tn.standingservice.Services.StandingService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Cast;
 import org.springframework.http.HttpStatus;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -65,8 +69,17 @@ public class StandingImpl implements StandingService {
 
         return standingRepo.findByTournamentIdAndTeamId(tournamentId,teamId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id" + teamId + "not found"));
     }
+    @KafkaListener(topics = "schedule.generated", groupId = "standings-service")
+    @Transactional
+    public void addStandingsForTournament(EventEnvelop<ScheduleGeneratedEvent> evt){
+        List<Integer> teams = evt.getPayload().teamsId();
+        for(Integer teamid : teams){
+            Standings standings = new Standings(evt.getPayload().tournamentId(), teamid.longValue(),0,0,0,0,0,0,0);
+            standingRepo.save(standings);
+        }
+    }
 
-    @KafkaListener(topics = "schedule.updatematchscore")
+    @KafkaListener(topics = "schedule.updatematchscore",groupId = "standings-service")
     public void updateStandingsForMatch(EventEnvelop<MatchScoreUpdateEvent > evt) {
         Standings homeStanding = standingRepo.findByTournamentIdAndTeamId(evt.getPayload().tournamentId(), evt.getPayload().homeTeamId()).orElseGet(() -> new Standings(evt.getPayload().tournamentId(), evt.getPayload().homeTeamId()));
         Standings awayStanding = standingRepo.findByTournamentIdAndTeamId(evt.getPayload().tournamentId(), evt.getPayload().awayTeamId()).orElseGet(() -> new Standings(evt.getPayload().tournamentId(), evt.getPayload().awayTeamId()));

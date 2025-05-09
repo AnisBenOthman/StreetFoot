@@ -1,7 +1,10 @@
 package tn.esprit.scedulingservice.ServiceImpl;
 
+import esprit.tn.shared.config.DTO.ScheduleGeneratedEvent;
+import esprit.tn.shared.config.EventEnvelop;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import tn.esprit.scedulingservice.DTO.SchedulingRequest;
 import tn.esprit.scedulingservice.Entities.MatchSchedule;
@@ -11,10 +14,12 @@ import tn.esprit.scedulingservice.Repositories.MatchSceduleRepository;
 import tn.esprit.scedulingservice.Repositories.RoundRepository;
 import tn.esprit.scedulingservice.Service.SchedulingService;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -22,6 +27,7 @@ import java.util.List;
 public class SchedulingServiceImpl implements SchedulingService {
     RoundRepository roundRepository;
     MatchSceduleRepository matchSceduleRepository;
+    KafkaTemplate<String,Object> kafkaTemplate;
 
     @Override
     public void generateScheduling(SchedulingRequest schedulingRequest) {
@@ -33,6 +39,14 @@ public class SchedulingServiceImpl implements SchedulingService {
         } else {
             throw new IllegalArgumentException("Invalid tournament type :" + schedulingRequest.tournamentType());
         }
+        List<Round> roundList = roundRepository.findByTournamentId(schedulingRequest.tournamentId());
+        List<String> roundIds = new ArrayList<>();
+        for (Round round : roundList ){
+            roundIds.add(round.getId());
+        }
+        ScheduleGeneratedEvent scheduleEvent = new ScheduleGeneratedEvent(schedulingRequest.tournamentId(),schedulingRequest.teams(),roundIds);
+        EventEnvelop<ScheduleGeneratedEvent> evt = EventEnvelop.<ScheduleGeneratedEvent>builder().eventId(UUID.randomUUID().toString()).timestamp(Instant.now()).type("schedule.generated").payload(scheduleEvent).build();
+        kafkaTemplate.send("schedule.generated",evt);
     }
 
     @Override
