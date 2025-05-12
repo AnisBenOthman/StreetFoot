@@ -175,9 +175,26 @@
                       </td>
                     </ng-container>
 
+                    <ng-container matColumnDef="score">
+                      <th mat-header-cell *matHeaderCellDef> Score </th>
+                      <td mat-cell *matCellDef="let match">
+                        {{match.homeScore !== undefined ? match.homeScore : '-'}} - {{match.awayScore !== undefined ? match.awayScore : '-'}}
+                      </td>
+                    </ng-container>
+
                     <ng-container matColumnDef="stadium">
                       <th mat-header-cell *matHeaderCellDef> Stade </th>
                       <td mat-cell *matCellDef="let match">{{match.stadium || 'Non défini'}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                      <th mat-header-cell *matHeaderCellDef> Actions </th>
+                      <td mat-cell *matCellDef="let match">
+                        <button mat-icon-button color="primary" 
+                                (click)="updateMatchScore(match)">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                      </td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -197,6 +214,72 @@
           </div>
         </div>
         
+        <mat-divider></mat-divider>
+
+        <div class="info-section">
+          <h2>Classement</h2>
+          <div *ngIf="standings.length > 0">
+            <table mat-table [dataSource]="standings" class="standings-table">
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef> Position </th>
+                <td mat-cell *matCellDef="let standing; let i = index"> {{i + 1}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="teamId">
+                <th mat-header-cell *matHeaderCellDef> Équipe </th>
+                <td mat-cell *matCellDef="let standing"> {{standing.teamId}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="matchesPlayed">
+                <th mat-header-cell *matHeaderCellDef> MJ </th>
+                <td mat-cell *matCellDef="let standing"> {{standing.matchesPlayed}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="wins">
+                <th mat-header-cell *matHeaderCellDef> V </th>
+                <td mat-cell *matCellDef="let standing"> {{standing.wins}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="draws">
+                <th mat-header-cell *matHeaderCellDef> N </th>
+                <td mat-cell *matCellDef="let standing"> {{standing.draws}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="losses">
+                <th mat-header-cell *matHeaderCellDef> D </th>
+                <td mat-cell *matCellDef="let standing"> {{standing.losses}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="goalScored">
+                <th mat-header-cell *matHeaderCellDef> BP </th>
+                <td mat-cell *matCellDef="let standing"> {{standing.goalScored}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="goalConceded">
+                <th mat-header-cell *matHeaderCellDef> BC </th>
+                <td mat-cell *matCellDef="let standing"> {{standing.goalConceded}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="goalDifference">
+                <th mat-header-cell *matHeaderCellDef> Diff </th>
+                <td mat-cell *matCellDef="let standing"> {{getGoalDifference(standing)}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="points">
+                <th mat-header-cell *matHeaderCellDef> Points </th>
+                <td mat-cell *matCellDef="let standing"> {{standing.points}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="standingsColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: standingsColumns;"></tr>
+            </table>
+          </div>
+
+          <div *ngIf="standings.length === 0" class="no-standings">
+            <p>Aucun classement disponible pour le moment.</p>
+          </div>
+        </div>
+
         <mat-card-actions>
           <button mat-button color="primary" routerLink="/tournaments">
             <mat-icon>arrow_back</mat-icon> Retour à la liste

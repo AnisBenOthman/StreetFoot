@@ -7,9 +7,14 @@ import { TournamentType } from '../../../models/tournament-type';
 import { Status } from '../../../models/status';
 import { Sport } from '../../../models/sport';
 import { SchedulingService } from 'src/app/services/scheduling.service';
+import { StandingsService } from 'src/app/services/standings.service';
 import { Round, Match } from 'src/app/models/additional-models';
+import { Standings } from 'src/app/models/standings';
 import { forkJoin, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatchUpdateDialogComponent } from '../match-update-dialog/match-update-dialog.component';
 
 @Component({
   selector: 'app-tournament-details',
@@ -20,13 +25,35 @@ export class TournamentDetailsComponent implements OnInit {
   tournament: Tournament | null = null;
   rounds: Round[] = [];
   matchesByRound: { [roundId: string]: Match[] } = {};
-  displayedColumns: string[] = ['matchId', 'teams', 'stadium'];
+  standings: Standings[] = [];
+  displayedColumns: string[] = [
+    'matchId',
+    'teams',
+    'stadium',
+    'score',
+    'actions',
+  ];
+  standingsColumns: string[] = [
+    'position',
+    'teamId',
+    'matchesPlayed',
+    'wins',
+    'draws',
+    'losses',
+    'goalScored',
+    'goalConceded',
+    'goalDifference',
+    'points',
+  ];
   loading = true;
 
   constructor(
     private route: ActivatedRoute,
     private tournamentService: TournamentService,
-    private schedulingService: SchedulingService
+    private schedulingService: SchedulingService,
+    private standingsService: StandingsService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -43,6 +70,7 @@ export class TournamentDetailsComponent implements OnInit {
         console.log('Tournament loaded:', tournament);
         this.tournament = tournament;
         this.loadRounds(id.toString());
+        this.loadStandings(id);
       },
       error: (error) => {
         console.error('Error loading tournament:', error);
@@ -93,6 +121,24 @@ export class TournamentDetailsComponent implements OnInit {
         },
         error: (error) => console.error('Error loading rounds:', error),
       });
+  }
+
+  private loadStandings(tournamentId: number): void {
+    console.log('Requesting standings for tournament:', tournamentId);
+    this.standingsService.getStandingsByTournamentId(tournamentId).subscribe({
+      next: (standings) => {
+        console.log('Standings loaded successfully:', standings);
+        this.standings = standings.sort((a, b) => b.points - a.points);
+      },
+      error: (error) => {
+        console.error('Error loading standings:', error);
+        console.error('Error details:', {
+          status: error.status,
+          message: error.message,
+          error: error.error,
+        });
+      },
+    });
   }
 
   getRoundMatches(roundId: string): Match[] {
@@ -168,5 +214,55 @@ export class TournamentDetailsComponent implements OnInit {
       default:
         return 'Inconnu';
     }
+  }
+
+  getGoalDifference(standing: Standings): number {
+    return standing.goalScored - standing.goalConceded;
+  }
+
+  updateMatchScore(match: Match): void {
+    const dialogRef = this.dialog.open(MatchUpdateDialogComponent, {
+      width: '400px',
+      data: { match },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.schedulingService
+          .updateMatch(match.id, result.homeScore, result.awayScore)
+          .subscribe({
+            next: (updatedMatch) => {
+              this.showSuccessMessage('Score mis à jour avec succès');
+              // Refresh the matches and standings
+              if (this.tournament) {
+                this.loadRounds(this.tournament.id!.toString());
+                this.loadStandings(this.tournament.id!);
+              }
+            },
+            error: (error) => {
+              console.error('Error updating match score:', error);
+              this.showErrorMessage('Erreur lors de la mise à jour du score');
+            },
+          });
+      }
+    });
+  }
+
+  private showSuccessMessage(message: string): void {
+    this.snackBar.open(message, 'Fermer', {
+      duration: 3000,
+      panelClass: ['success-snackbar'],
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+    });
+  }
+
+  private showErrorMessage(message: string): void {
+    this.snackBar.open(message, 'Fermer', {
+      duration: 5000,
+      panelClass: ['error-snackbar'],
+      horizontalPosition: 'end',
+      verticalPosition: 'top',
+    });
   }
 }

@@ -23,4 +23,15 @@ export class SchedulingService {
       `${this.matchUrl}getallmatchbyround/${roundId}`
     );
   }
+
+  updateMatch(
+    matchId: string,
+    homeScore: number,
+    awayScore: number
+  ): Observable<Match> {
+    return this.http.put<Match>(
+      `${this.matchUrl}updatescore/${matchId}/${homeScore}/${awayScore}`,
+      {}
+    );
+  }
 }

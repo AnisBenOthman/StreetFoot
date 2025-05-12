@@ -9,6 +9,7 @@ import esprit.tn.standingservice.Repositories.StandingRepo;
 import esprit.tn.standingservice.Services.StandingService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Cast;
 import org.springframework.http.HttpStatus;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class StandingImpl implements StandingService {
     final StandingRepo standingRepo;
     final KafkaTemplate<String, Object> kafkaTemplate;
@@ -69,7 +71,7 @@ public class StandingImpl implements StandingService {
 
         return standingRepo.findByTournamentIdAndTeamId(tournamentId,teamId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Team with id" + teamId + "not found"));
     }
-    @KafkaListener(topics = "schedule.generated", groupId = "standings-service")
+    @KafkaListener(topics = "schedule.generated", groupId = "standings-service",containerFactory = "scheduleGeneratedKafkaListenerContainerFactory")
     @Transactional
     public void addStandingsForTournament(EventEnvelop<ScheduleGeneratedEvent> evt){
         List<Integer> teams = evt.getPayload().teamsId();
@@ -79,12 +81,13 @@ public class StandingImpl implements StandingService {
         }
     }
 
-    @KafkaListener(topics = "schedule.updatematchscore",groupId = "standings-service")
-    public void updateStandingsForMatch(EventEnvelop<MatchScoreUpdateEvent > evt) {
+    @KafkaListener(topics = "schedule.updatematchscore",groupId = "standings-service",containerFactory = "matchScoreKafkaListenerContainerFactory")
+    public void updateStandingsForMatch(EventEnvelop<MatchScoreUpdateEvent> evt) {
         Standings homeStanding = standingRepo.findByTournamentIdAndTeamId(evt.getPayload().tournamentId(), evt.getPayload().homeTeamId()).orElseGet(() -> new Standings(evt.getPayload().tournamentId(), evt.getPayload().homeTeamId()));
         Standings awayStanding = standingRepo.findByTournamentIdAndTeamId(evt.getPayload().tournamentId(), evt.getPayload().awayTeamId()).orElseGet(() -> new Standings(evt.getPayload().tournamentId(), evt.getPayload().awayTeamId()));
         applyResult(homeStanding, evt.getPayload().homeScore(), evt.getPayload().awayScore());
         applyResult(awayStanding, evt.getPayload().awayScore(), evt.getPayload().homeScore());
+        log.info("l'objet standing est : {}", homeStanding);
         standingRepo.save(homeStanding);
         standingRepo.save(awayStanding);
 

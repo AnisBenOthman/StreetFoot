@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Builder
 @ToString
-public class Standings {
+public class Standings extends BaseEntite{
     Long tournamentId;
     Long teamId;
     int goalScored=0;
