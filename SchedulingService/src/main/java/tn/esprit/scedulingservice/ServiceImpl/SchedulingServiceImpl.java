@@ -51,10 +51,9 @@ public class SchedulingServiceImpl implements SchedulingService {
 
     @Override
     public void generateChampionshipSchedule(SchedulingRequest schedulingRequest) {
-        roundRepository.deleteAll();
-        matchSceduleRepository.deleteAll();
+        
         int numberOfTeams = schedulingRequest.numberOfTeams();
-        int numberOfRounds = numberOfTeams - 1;
+        int numberOfRounds = schedulingRequest.championshipMode().equalsIgnoreCase("HOME_AWAY") ? 2 * (numberOfTeams - 1) : (numberOfTeams - 1);
         int matchesPerRound = numberOfTeams / 2;
         List<Integer> teamsId = new ArrayList<>(schedulingRequest.teams());
         LocalDate currentRoundDate = schedulingRequest.startDate();
@@ -71,13 +70,20 @@ public class SchedulingServiceImpl implements SchedulingService {
             roundSchedule.setStatus(Status.PLANNED);
             roundRepository.save(roundSchedule);
             List<MatchSchedule> roundMatches = new ArrayList<>();
+            Boolean isReturnRound = schedulingRequest.championshipMode().equalsIgnoreCase("HOME_AWAY") && roundNum > (numberOfTeams -1);
             for (int match = 0; match < matchesPerRound; match++) {
                 int homeIndex = match;
                 int awayIndex = numberOfTeams - match - 1;
                 MatchSchedule matchSchedule = new MatchSchedule();
                 matchSchedule.setRoundId(roundSchedule.getId());
-                matchSchedule.setHomeTeamId(teamsId.get(homeIndex));
-                matchSchedule.setAwayTeamId(teamsId.get(awayIndex));
+                if(isReturnRound){
+                    matchSchedule.setHomeTeamId(teamsId.get(awayIndex));
+                    matchSchedule.setAwayTeamId(teamsId.get(homeIndex));
+                }else{
+                    matchSchedule.setHomeTeamId(teamsId.get(homeIndex));
+                    matchSchedule.setAwayTeamId(teamsId.get(awayIndex));
+                }
+
                 roundMatches.add(matchSchedule);
 
 
@@ -88,6 +94,10 @@ public class SchedulingServiceImpl implements SchedulingService {
             Integer last = teamsId.remove(teamsId.size() - 1);
             teamsId.add(0, last);
             teamsId.add(0, pivot);
+            // Reset team order for the start of return rounds if in Home_Away mode
+            if (schedulingRequest.championshipMode().equals("Home_Away") && roundNum == numberOfTeams - 1) {
+                teamsId = new ArrayList<>(schedulingRequest.teams());
+            }
 
              currentRoundDate = currentRoundDate.plusDays(schedulingRequest.roundFrequency());
         }
