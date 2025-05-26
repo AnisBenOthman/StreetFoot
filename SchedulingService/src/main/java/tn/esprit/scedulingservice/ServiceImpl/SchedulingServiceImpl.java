@@ -51,7 +51,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 
     @Override
     public void generateChampionshipSchedule(SchedulingRequest schedulingRequest) {
-        
+
         int numberOfTeams = schedulingRequest.numberOfTeams();
         int numberOfRounds = schedulingRequest.championshipMode().equalsIgnoreCase("HOME_AWAY") ? 2 * (numberOfTeams - 1) : (numberOfTeams - 1);
         int matchesPerRound = numberOfTeams / 2;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Tournament } from '../../../models/tournament';
 import { TournamentService } from '../../../services/tournament.service';
@@ -15,6 +15,7 @@ import { catchError, finalize } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatchUpdateDialogComponent } from '../match-update-dialog/match-update-dialog.component';
+import { TeamService } from 'src/app/services/team.service';
 
 @Component({
   selector: 'app-tournament-details',
@@ -46,14 +47,17 @@ export class TournamentDetailsComponent implements OnInit {
     'points',
   ];
   loading = true;
+  teamNames: { [teamId: number]: string } = {};
 
   constructor(
     private route: ActivatedRoute,
     private tournamentService: TournamentService,
     private schedulingService: SchedulingService,
     private standingsService: StandingsService,
+    private teamService: TeamService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -123,12 +127,29 @@ export class TournamentDetailsComponent implements OnInit {
       });
   }
 
+  private loadTeamName(teamId: number): void {
+    if (!this.teamNames[teamId]) {
+      this.teamService.getTeamById(teamId).subscribe({
+        next: (team) => {
+          this.teamNames[teamId] = team.name;
+        },
+        error: (error) => {
+          console.error(`Error loading team name for ID ${teamId}:`, error);
+          this.teamNames[teamId] = `Équipe ${teamId}`; // Fallback
+        },
+      });
+    }
+  }
+
   private loadStandings(tournamentId: number): void {
     console.log('Requesting standings for tournament:', tournamentId);
     this.standingsService.getStandingsByTournamentId(tournamentId).subscribe({
       next: (standings) => {
         console.log('Standings loaded successfully:', standings);
         this.standings = standings.sort((a, b) => b.points - a.points);
+        standings.forEach((standing) => {
+          this.loadTeamName(standing.teamId);
+        });
       },
       error: (error) => {
         console.error('Error loading standings:', error);
@@ -228,22 +249,23 @@ export class TournamentDetailsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        console.log('Updating match score with result:', result);
         this.schedulingService
           .updateMatch(match.id, result.homeScore, result.awayScore)
           .subscribe({
             next: (updatedMatch) => {
+              console.log('Match updated successfully:', updatedMatch);
               this.showSuccessMessage('Score mis à jour avec succès');
-              // Refresh the matches and standings
-              if (this.tournament) {
-                this.loadRounds(this.tournament.id!.toString());
-                this.loadStandings(this.tournament.id!);
-              }
+              // Rafraîchir la page après la mise à jour
+              window.location.reload();
             },
             error: (error) => {
               console.error('Error updating match score:', error);
               this.showErrorMessage('Erreur lors de la mise à jour du score');
             },
           });
+      } else {
+        console.log('Match update dialog closed without result.');
       }
     });
   }
@@ -264,5 +286,9 @@ export class TournamentDetailsComponent implements OnInit {
       horizontalPosition: 'end',
       verticalPosition: 'top',
     });
+  }
+
+  getTeamName(teamId: number): string {
+    return this.teamNames[teamId] || `Équipe ${teamId}`;
   }
 }

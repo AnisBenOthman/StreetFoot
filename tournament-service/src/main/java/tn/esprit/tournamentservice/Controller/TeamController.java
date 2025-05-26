@@ -16,9 +16,16 @@ import java.util.List;
 @AllArgsConstructor
 public class TeamController {
     @PostMapping("addteam")
-    public ResponseEntity<Team> add(@Valid @RequestBody Team entity) {
-        Team team = teamimpl.add(entity);
-        return ResponseEntity.ok(team);
+    public ResponseEntity<?> add(@Valid @RequestBody Team entity) {
+        Team exist = teamimpl.findbyname(entity.getName());
+        if (exist != null && exist.getName().equals(entity.getName())) {
+            return ResponseEntity.badRequest().body("Team already exist");
+        } else {
+            Team team = teamimpl.add(entity);
+            return ResponseEntity.ok(team);
+        }
+
+
     }
 
     @PutMapping("updateteam/{id}")
@@ -38,17 +45,20 @@ public class TeamController {
         teamimpl.delete(id);
         return ResponseEntity.ok().build();
     }
-@DeleteMapping("deleteall")
+
+    @DeleteMapping("deleteall")
     public ResponseEntity<Void> deleteAll() {
         teamimpl.deleteAll();
         return ResponseEntity.ok().build();
     }
-@GetMapping("getall")
+
+    @GetMapping("getall")
     public ResponseEntity<List<Team>> getAll() {
         List<Team> list = teamimpl.getAll();
         return ResponseEntity.ok(list);
     }
-@GetMapping("getteambyname/{name}")
+
+    @GetMapping("getteambyname/{name}")
     public ResponseEntity<Team> findbyname(@Valid @PathVariable String name) {
         Team team = teamimpl.findbyname(name);
         return ResponseEntity.ok(team);

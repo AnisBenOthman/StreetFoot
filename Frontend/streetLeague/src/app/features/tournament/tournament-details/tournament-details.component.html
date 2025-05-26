@@ -126,11 +126,11 @@
         <mat-divider></mat-divider>
         
         <div class="info-section">
-          <h2>IDs des équipes participantes</h2>
+          <h2>Les équipes participantes</h2>
           <div class="teams-list">
             <mat-chip-set>
               <mat-chip *ngFor="let teamId of tournament.participatingTeamIds">
-                {{ teamId }}
+                {{ getTeamName(teamId) }}
               </mat-chip>
             </mat-chip-set>
           </div>
@@ -171,7 +171,7 @@
                     <ng-container matColumnDef="teams">
                       <th mat-header-cell *matHeaderCellDef> Équipes </th>
                       <td mat-cell *matCellDef="let match">
-                        {{match.homeTeamId || 'TBD'}} vs {{match.awayTeamId || 'TBD'}}
+                        {{ getTeamName(match.homeTeamId) || 'TBD' }} vs {{ getTeamName(match.awayTeamId) || 'TBD' }}
                       </td>
                     </ng-container>
 
@@ -227,7 +227,7 @@
 
               <ng-container matColumnDef="teamId">
                 <th mat-header-cell *matHeaderCellDef> Équipe </th>
-                <td mat-cell *matCellDef="let standing"> {{standing.teamId}} </td>
+                <td mat-cell *matCellDef="let standing"> {{ getTeamName(standing.teamId) }} </td>
               </ng-container>
 
               <ng-container matColumnDef="matchesPlayed">
