@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Prediction Result</h2>
+<div mat-dialog-content>
+  <p><strong>Predicted Winner:</strong> <span class="winner">{{ data.predictedLabel }}</span></p>
+  <p><strong>Probabilities:</strong></p>
+  <table class="probabilities">
+    <thead>
+      <tr>
+        <th>Outcome</th>
+        <th>Probability</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let key of objectKeys(data.probabilities)">
+        <td>{{ key }}</td>
+        <td>{{ (data.probabilities[key] * 100).toFixed(2) }}%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="closeDialog()" color="primary">Close</button>
+</div>

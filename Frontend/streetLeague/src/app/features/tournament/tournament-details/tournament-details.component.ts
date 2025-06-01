@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatchUpdateDialogComponent } from '../match-update-dialog/match-update-dialog.component';
 import { TeamService } from 'src/app/services/team.service';
+import { PredictionDialogComponent } from '../prediction-dialog/prediction-dialog.component';
 
 @Component({
   selector: 'app-tournament-details',
@@ -285,6 +286,27 @@ export class TournamentDetailsComponent implements OnInit {
       panelClass: ['error-snackbar'],
       horizontalPosition: 'end',
       verticalPosition: 'top',
+    });
+  }
+
+  predictMatch(matchId: string): void {
+    this.schedulingService.getPrediction(matchId).subscribe({
+      next: (result: {
+        predictedLabel: string;
+        probabilites: { [key: string]: number };
+      }) => {
+        this.dialog.open(PredictionDialogComponent, {
+          width: '400px',
+          data: {
+            predictedLabel: result.predictedLabel,
+            probabilities: result.probabilites,
+          },
+        });
+      },
+      error: (error: any) => {
+        console.error('Error fetching prediction:', error);
+        this.showErrorMessage('Erreur lors de la prédiction');
+      },
     });
   }
 

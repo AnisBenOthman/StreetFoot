@@ -80,7 +80,7 @@ export class TournamentListComponent {
       return;
     }
 
-    const teamId = 22; // TODO: Utiliser l'ID de l'équipe connectée
+    const teamId = 2; // TODO: Utiliser l'ID de l'équipe connectée
     if (tournament.participatingTeamIds.includes(teamId)) {
       this.showErrorMessage('Votre équipe est déjà inscrite à ce tournoi');
       return;

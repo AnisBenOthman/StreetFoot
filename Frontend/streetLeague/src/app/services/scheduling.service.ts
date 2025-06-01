@@ -9,6 +9,7 @@ import { Match, Round } from '../models/additional-models';
 export class SchedulingService {
   roundUrl = 'http://127.0.0.1:8084/sceduling-service/round-schedules/';
   matchUrl = 'http://127.0.0.1:8084/sceduling-service/match-schedules/';
+  predictUrl = 'http://127.0.0.1:8084/sceduling-service/prediction/';
 
   constructor(private http: HttpClient) {}
 
@@ -33,5 +34,15 @@ export class SchedulingService {
       `${this.matchUrl}updatescore/${matchId}/${homeScore}/${awayScore}`,
       {}
     );
+  }
+
+  getPrediction(matchId: string): Observable<{
+    predictedLabel: string;
+    probabilites: { [key: string]: number };
+  }> {
+    return this.http.get<{
+      predictedLabel: string;
+      probabilites: { [key: string]: number };
+    }>(`${this.predictUrl}predict/${matchId}`);
   }
 }

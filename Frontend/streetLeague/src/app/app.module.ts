@@ -26,6 +26,7 @@ import { TournamentCreationComponent } from './features/tournament/tournament-cr
 import { TournamentListComponent } from './features/tournament/tournament-list/tournament-list.component';
 import { TournamentDetailsComponent } from './features/tournament/tournament-details/tournament-details.component';
 import { MatchUpdateDialogComponent } from './features/tournament/match-update-dialog/match-update-dialog.component';
+import { PredictionDialogComponent } from './features/tournament/prediction-dialog/prediction-dialog.component';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -37,6 +38,7 @@ import { SharedModule } from './shared/shared.module';
     TournamentListComponent,
     TournamentDetailsComponent,
     MatchUpdateDialogComponent,
+    PredictionDialogComponent,
   ],
   imports: [
     BrowserModule,
