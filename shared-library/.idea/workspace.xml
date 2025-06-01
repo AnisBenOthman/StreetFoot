@@ -5,19 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acf41736-cde7-4796-a937-9862a93148cf" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Frontend/streetLeague/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/streetLeague/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/streetLeague/src/app/features/tournament/tournament-details/tournament-details.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/streetLeague/src/app/features/tournament/tournament-details/tournament-details.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/streetLeague/src/app/features/tournament/tournament-details/tournament-details.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/streetLeague/src/app/features/tournament/tournament-details/tournament-details.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/streetLeague/src/app/features/tournament/tournament-details/tournament-details.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/streetLeague/src/app/features/tournament/tournament-details/tournament-details.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/streetLeague/src/app/features/tournament/tournament-list/tournament-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/streetLeague/src/app/features/tournament/tournament-list/tournament-list.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/streetLeague/src/app/services/scheduling.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/streetLeague/src/app/services/scheduling.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SchedulingService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../SchedulingService/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SchedulingService/src/main/java/tn/esprit/scedulingservice/Entities/MatchSchedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SchedulingService/src/main/java/tn/esprit/scedulingservice/Entities/MatchSchedule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SchedulingService/src/main/java/tn/esprit/scedulingservice/Repositories/MatchSceduleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SchedulingService/src/main/java/tn/esprit/scedulingservice/Repositories/MatchSceduleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SchedulingService/src/main/java/tn/esprit/scedulingservice/ScedulingServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SchedulingService/src/main/java/tn/esprit/scedulingservice/ScedulingServiceApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../SchedulingService/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../SchedulingService/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../SchedulingService/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../SchedulingService/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SchedulingService/target/classes/tn/esprit/scedulingservice/Entities/MatchSchedule$MatchScheduleBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/../SchedulingService/target/classes/tn/esprit/scedulingservice/Entities/MatchSchedule$MatchScheduleBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SchedulingService/target/classes/tn/esprit/scedulingservice/Entities/MatchSchedule.class" beforeDir="false" afterPath="$PROJECT_DIR$/../SchedulingService/target/classes/tn/esprit/scedulingservice/Entities/MatchSchedule.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SchedulingService/target/classes/tn/esprit/scedulingservice/ScedulingServiceApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/../SchedulingService/target/classes/tn/esprit/scedulingservice/ScedulingServiceApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SchedulingService/target/test-classes/tn/esprit/scedulingservice/ScedulingServiceApplicationTests.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../StandingService/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../StandingService/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../StandingService/src/main/java/esprit/tn/standingservice/ServiceImp/StandingImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../StandingService/src/main/java/esprit/tn/standingservice/ServiceImp/StandingImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../StandingService/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../StandingService/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../StandingService/src/main/java/esprit/tn/standingservice/Controllers/StandingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../StandingService/src/main/java/esprit/tn/standingservice/Controllers/StandingController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tournament-service/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../tournament-service/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tournament-service/src/main/java/tn/esprit/tournamentservice/Controller/TeamController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../tournament-service/src/main/java/tn/esprit/tournamentservice/Controller/TeamController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tournament-service/src/main/java/tn/esprit/tournamentservice/Repositories/TeamRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../tournament-service/src/main/java/tn/esprit/tournamentservice/Repositories/TeamRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tournament-service/src/main/java/tn/esprit/tournamentservice/Service/TeamService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../tournament-service/src/main/java/tn/esprit/tournamentservice/Service/TeamService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tournament-service/src/main/java/tn/esprit/tournamentservice/ServiceImpl/TeamImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../tournament-service/src/main/java/tn/esprit/tournamentservice/ServiceImpl/TeamImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tournament-service/target/classes/tn/esprit/tournamentservice/Controller/TeamController.class" beforeDir="false" afterPath="$PROJECT_DIR$/../tournament-service/target/classes/tn/esprit/tournamentservice/Controller/TeamController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tournament-service/target/classes/tn/esprit/tournamentservice/Repositories/TeamRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/../tournament-service/target/classes/tn/esprit/tournamentservice/Repositories/TeamRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tournament-service/target/classes/tn/esprit/tournamentservice/Service/TeamService.class" beforeDir="false" afterPath="$PROJECT_DIR$/../tournament-service/target/classes/tn/esprit/tournamentservice/Service/TeamService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tournament-service/target/classes/tn/esprit/tournamentservice/ServiceImpl/TeamImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/../tournament-service/target/classes/tn/esprit/tournamentservice/ServiceImpl/TeamImpl.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,8 +36,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Record" />
         <option value="Class" />
+        <option value="Record" />
       </list>
     </option>
   </component>
@@ -43,21 +52,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;anis&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Anis/OneDrive - IP LABEL/Documents/ANIS_CONFIDENTIEL/COURS_ESPRIT/3éme année/PI/StreetLeague/shared-library&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "anis",
+    "last_opened_file_path": "C:/Users/Anis/Downloads/MICROSERVICES/applicationWD-master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -73,6 +82,7 @@
       <workItem from="1746783857866" duration="6198000" />
       <workItem from="1746809091375" duration="1049000" />
       <workItem from="1746810467290" duration="1492000" />
+      <workItem from="1748598276000" duration="2923000" />
     </task>
     <servers />
   </component>

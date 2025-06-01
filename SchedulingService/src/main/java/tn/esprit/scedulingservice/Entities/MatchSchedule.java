@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+
 @Document(collection = "matchSchedules")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -20,6 +22,7 @@ public class MatchSchedule extends BaseEntity{
     Integer homeScore;
     Integer awayScore;
     Long winnerTeamId;
+    LocalDate date;
     public void computeResult() {
         if (homeScore == null || awayScore == null) {
             winnerTeamId = null;

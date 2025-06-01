@@ -1,9 +1,12 @@
 package esprit.tn.standingservice.Controllers;
 
 import esprit.tn.shared.config.DTO.MatchScoreUpdateEvent;
+import esprit.tn.shared.config.DTO.StandingDTO;
+import esprit.tn.standingservice.Entities.StandingMapper;
 import esprit.tn.standingservice.Entities.Standings;
 import esprit.tn.standingservice.ServiceImp.StandingImpl;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("standings")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class StandingController {
     public Optional<Standings> retrieveById(String s) {
         return standingImp.retrieveById(s);
@@ -44,13 +47,15 @@ public class StandingController {
         return ResponseEntity.ok(list);
     }
 @GetMapping("getstandingfortournamentandteam/{tournamentId}/{teamId}")
-    public ResponseEntity<Standings>  findByTournamentIdAndTeamId(@PathVariable Long tournamentId, @PathVariable Long teamId) {
+    public ResponseEntity<StandingDTO>  findByTournamentIdAndTeamId(@PathVariable Long tournamentId, @PathVariable Long teamId) {
         Standings saved = standingImp.findByTournamentIdAndTeamId(tournamentId, teamId);
-        return ResponseEntity.ok(saved);
+        StandingDTO dto = standingMapper.standingToStandingDTO(saved);
+        return ResponseEntity.ok(dto);
     }
 
 
 
-    StandingImpl standingImp;
+    final StandingImpl standingImp;
+    final StandingMapper standingMapper;
 
 }

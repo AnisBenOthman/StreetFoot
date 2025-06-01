@@ -82,6 +82,11 @@ public class MatchSceduleController {
         }
 
     }
+    @GetMapping("getallmatcheswithpaination")
+    public List<MatchSchedule> findAllMatch(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "10") int size) {
+        return matchSceduleServiceImp.findAllMatch(page,size);
+    }
 
     MatchSceduleServiceImp matchSceduleServiceImp;
 }

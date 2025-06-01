@@ -8,6 +8,7 @@ import tn.esprit.tournamentservice.Repositories.TeamRepository;
 import tn.esprit.tournamentservice.Service.TeamService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +53,7 @@ public class TeamImpl implements TeamService {
     }
 
     @Override
-    public Team findbyname(String name) {
+    public Optional<Team>  findbyname(String name) {
         return teamRepository.findByName(name);
     }
 }

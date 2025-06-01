@@ -5,6 +5,9 @@ import esprit.tn.shared.config.DTO.MatchScoreUpdateEvent;
 import esprit.tn.shared.config.EventEnvelop;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -94,5 +97,16 @@ public class MatchSceduleServiceImp implements MatchSceduleService {
         //standingimpl.updateStandingsForMatch(match.getId());
         kafkaTemplate.send("schedule.updatematchscore", envelop);
         return match;
+    }
+
+    @Override
+    public List<MatchSchedule> findAllMatch(int pageNumber, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("date").descending());
+        Page<MatchSchedule> page = matchSceduleRepository.findAll(pageRequest);
+        int totalPages = page.getTotalPages();
+
+        List<MatchSchedule> results = page.getContent(); // your paginated data
+
+        return results;
     }
 }

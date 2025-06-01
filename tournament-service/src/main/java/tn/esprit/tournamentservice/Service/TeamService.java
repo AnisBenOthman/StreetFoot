@@ -2,7 +2,10 @@ package tn.esprit.tournamentservice.Service;
 
 import tn.esprit.tournamentservice.Entities.Team;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 public interface TeamService extends BaseService<Team, Long>{
-    Team findbyname(String name);
+    Optional<Team > findbyname(String name);
 
 }
