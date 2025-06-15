@@ -27,7 +27,7 @@ import java.util.UUID;
 public class SchedulingServiceImpl implements SchedulingService {
     RoundRepository roundRepository;
     MatchSceduleRepository matchSceduleRepository;
-    KafkaTemplate<String,Object> kafkaTemplate;
+    KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override
     public void generateScheduling(SchedulingRequest schedulingRequest) {
@@ -41,12 +41,12 @@ public class SchedulingServiceImpl implements SchedulingService {
         }
         List<Round> roundList = roundRepository.findByTournamentId(schedulingRequest.tournamentId());
         List<String> roundIds = new ArrayList<>();
-        for (Round round : roundList ){
+        for (Round round : roundList) {
             roundIds.add(round.getId());
         }
-        ScheduleGeneratedEvent scheduleEvent = new ScheduleGeneratedEvent(schedulingRequest.tournamentId(),schedulingRequest.teams(),roundIds);
+        ScheduleGeneratedEvent scheduleEvent = new ScheduleGeneratedEvent(schedulingRequest.tournamentId(), schedulingRequest.teams(), roundIds);
         EventEnvelop<ScheduleGeneratedEvent> evt = EventEnvelop.<ScheduleGeneratedEvent>builder().eventId(UUID.randomUUID().toString()).timestamp(Instant.now()).type("schedule.generated").payload(scheduleEvent).build();
-        kafkaTemplate.send("schedule.generated",evt);
+        kafkaTemplate.send("schedule.generated", evt);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 
 
         for (int roundNum = 1; roundNum <= numberOfRounds; roundNum++) {
-            log.info("les équipes du round n°" +roundNum +  "sont : {}",teamsId);
+            log.info("les équipes du round n°" + roundNum + "sont : {}", teamsId);
 
             Round roundSchedule = new Round();
             roundSchedule.setTournamentId(schedulingRequest.tournamentId());
@@ -70,16 +70,16 @@ public class SchedulingServiceImpl implements SchedulingService {
             roundSchedule.setStatus(Status.PLANNED);
             roundRepository.save(roundSchedule);
             List<MatchSchedule> roundMatches = new ArrayList<>();
-            Boolean isReturnRound = schedulingRequest.championshipMode().equalsIgnoreCase("HOME_AWAY") && roundNum > (numberOfTeams -1);
+            Boolean isReturnRound = schedulingRequest.championshipMode().equalsIgnoreCase("HOME_AWAY") && roundNum > (numberOfTeams - 1);
             for (int match = 0; match < matchesPerRound; match++) {
                 int homeIndex = match;
                 int awayIndex = numberOfTeams - match - 1;
                 MatchSchedule matchSchedule = new MatchSchedule();
                 matchSchedule.setRoundId(roundSchedule.getId());
-                if(isReturnRound){
+                if (isReturnRound) {
                     matchSchedule.setHomeTeamId(teamsId.get(awayIndex));
                     matchSchedule.setAwayTeamId(teamsId.get(homeIndex));
-                }else{
+                } else {
                     matchSchedule.setHomeTeamId(teamsId.get(homeIndex));
                     matchSchedule.setAwayTeamId(teamsId.get(awayIndex));
                 }
@@ -99,7 +99,7 @@ public class SchedulingServiceImpl implements SchedulingService {
                 teamsId = new ArrayList<>(schedulingRequest.teams());
             }
 
-             currentRoundDate = currentRoundDate.plusDays(schedulingRequest.roundFrequency());
+            currentRoundDate = currentRoundDate.plusDays(schedulingRequest.roundFrequency());
         }
     }
 
@@ -118,6 +118,7 @@ public class SchedulingServiceImpl implements SchedulingService {
         }
 
         int numberOfRounds = teamsPerGroup - 1;
+        List<MatchSchedule> allMatches = new ArrayList<>();
 
         // Step 2: Generate rounds across all groups
         for (int roundIndex = 0; roundIndex < numberOfRounds; roundIndex++) {
@@ -149,9 +150,12 @@ public class SchedulingServiceImpl implements SchedulingService {
                     match.setRoundId(globalRound.getId());
                     match.setHomeTeamId(home);
                     match.setAwayTeamId(away);
-                    matchSceduleRepository.save(match);
+                    allMatches.add(match);
+
                 }
+
             }
+            matchSceduleRepository.saveAll(allMatches);
 
             currentDate = currentDate.plusDays(schedulingRequest.roundFrequency()); // Next global round date
         }

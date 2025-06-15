@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: tn.esprit.discoverservice.DiscoverServiceApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 15.22 s -- in tn.esprit.discoverservice.DiscoverServiceApplicationTests

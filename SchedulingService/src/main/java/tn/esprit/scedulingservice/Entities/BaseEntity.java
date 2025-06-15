@@ -22,4 +22,7 @@ public class BaseEntity implements Serializable {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     LocalDate updatedAt = LocalDate.now();
     public String getId() { return id; }
+    public void setId(String id) {
+        this.id = id;
+    }
 }
