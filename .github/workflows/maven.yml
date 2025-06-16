@@ -30,9 +30,6 @@ jobs:
       - name: Compile
         run: mvn -f tournament-service/pom.xml clean compile
 
-      - name: Test
-        run: mvn -f tournament-service/pom.xml test
-
       - name: Build with Maven
         run: mvn -B package --file tournament-service/pom.xml
 
