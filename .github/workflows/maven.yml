@@ -37,10 +37,12 @@ jobs:
       - name: SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_TOURNAMENT }}
-        run: mvn -f tournament-service/pom.xml \
-             verify sonar:sonar \
-             -Dsonar.projectKey=anisbenothman_StreetFoot_tournament-service \
-             -Dsonar.login=${{ secrets.SONAR_TOKEN_TOURNAMENT }}
+        run: |
+          mvn -f tournament-service/pom.xml \
+          verify sonar:sonar \
+          -Dsonar.projectKey=anisbenothman_StreetFoot_tournament-service \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN_TOURNAMENT }}
+
 
 
       - name: Update dependency graph
