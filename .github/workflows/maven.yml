@@ -1,4 +1,4 @@
-name: Backend Microservices CI
+name: CI - Tournament Service
 
 on:
   push:
@@ -10,6 +10,21 @@ jobs:
   tournament-service:
     name: tournament-service Build & Test
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: testdb
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - uses: actions/checkout@v4
@@ -26,12 +41,21 @@ jobs:
           cd shared-library
           mvn clean install
       - run: echo "shared library build successfully."
+      - name: Wait for MySQL to be ready
+        run: |
+          echo "Waiting for MySQL to start..."
+          until mysqladmin ping -h 127.0.0.1 -uuser -ppassword --silent; do
+            echo "Still waiting for database..."
+            sleep 3
+          done
       
       - name: Compile
         run: mvn -f tournament-service/pom.xml clean compile
 
       - name: Build with Maven
-        run: mvn -B package --file tournament-service/pom.xml
+        run: mvn -B package --file tournament-service/pom.xml -Dspring.datasource.url=jdbc:mysql://localhost:3306/testdb \
+                            -Dspring.datasource.username=user \
+                            -Dspring.datasource.password=password
 
       - name: SonarCloud analysis
         env:
