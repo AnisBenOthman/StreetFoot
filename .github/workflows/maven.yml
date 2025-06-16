@@ -21,7 +21,12 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - run: echo "🎉 The job was automatically trigerr."
-
+      - name: Build and install shared-library
+        run: |
+          cd shared-library
+          mvn clean install
+      - run: echo "shared library build successfully."
+      
       - name: Compile
         run: mvn -f tournament-service/pom.xml clean compile
 
