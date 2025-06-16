@@ -53,9 +53,11 @@ jobs:
         run: mvn -f tournament-service/pom.xml clean compile
 
       - name: Build with Maven
-        run: mvn -B package --file tournament-service/pom.xml -Dspring.datasource.url=jdbc:mysql://localhost:3306/testdb \
-                            -Dspring.datasource.username=user \
-                            -Dspring.datasource.password=password
+        run: |
+          mvn -B package --file tournament-service/pom.xml \
+              -Dspring.datasource.url=jdbc:mysql://localhost:3306/testdb \
+              -Dspring.datasource.username=user \
+              -Dspring.datasource.password=password
 
       - name: SonarCloud analysis
         env:
