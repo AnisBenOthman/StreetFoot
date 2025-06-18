@@ -2,15 +2,9 @@ name: CI - Tournament Service
 
 on:
   push:
-<<<<<<< HEAD
-    branches: ["anis"]
+    branches: ["master"]
   pull_request:
-    branches: ["anis"]
-=======
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
->>>>>>> 81211ca5bae959db51e96ad39b487b16c01e4e96
+    branches: ["master"]
 
 jobs:
   tournament-service:
