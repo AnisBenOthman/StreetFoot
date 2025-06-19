@@ -297,3 +297,71 @@ jobs:
           docker tag anisbenothman/discover-service:latest anisbenothman/discover-service:latest
           docker push anisbenothman/discover-service:latest
           echo "Docker image pushed to Docker Hub successfully."
+  
+  gateway:
+    name: gateway Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: maven
+
+      - name: Build and install shared-library
+        run: |
+          cd shared-library
+          mvn clean install
+      - run: echo "shared library build successfully."
+      - name: Compile
+        run: mvn -f Gateway/pom.xml clean compile -DskipTests
+
+      - name: Build with Maven
+        run: |
+          mvn -B package --file Gateway/pom.xml -DskipTests
+
+      
+
+      - name: Set up Maven settings.xml
+        run: |
+          mkdir -p ~/.m2
+          cat > ~/.m2/settings.xml << EOF
+          <settings>
+            <servers>
+              <server>
+                <id>deploymentRepo</id>
+                <username>${{ secrets.NEXUS_USERNAME }}</username>
+                <password>${{ secrets.NEXUS_PASSWORD }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
+      - name: Build and deploy
+        run: |
+          mvn -f Gateway/pom.xml clean deploy \
+          -DskipTests \
+          -DaltDeploymentRepository=deploymentRepo::default::${{ secrets.NEXUS_URL }}/repository/maven-snapshots
+          echo "Gateway Service deployed successfully."
+
+      - name: build docker image
+        run: |
+          cd Gateway
+          docker build -t anisbenothman/Gateway:latest .
+          echo "Docker image built successfully."
+
+      - name: login to dockerhub
+        run: |
+          echo "Logging in to Docker Hub..."
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+          echo "Logged in successfully."
+
+      - name: deploy to dockerhub
+        run: |
+          docker tag anisbenothman/Gateway:latest anisbenothman/Gateway:latest
+          docker push anisbenothman/Gateway:latest
+          echo "Docker image pushed to Docker Hub successfully."
