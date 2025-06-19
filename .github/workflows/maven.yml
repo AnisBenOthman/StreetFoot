@@ -61,7 +61,7 @@ jobs:
         run: |
           mvn -f tournament-service/pom.xml clean deploy \
           -DskipTests \
-          -DaltDeploymentRepository=deploymentRepo::default::${{ secrets.NEXUS_URL }}/repository/maven-releases
+          -DaltDeploymentRepository=deploymentRepo::default::${{ secrets.NEXUS_URL }}/repository/maven-snapshots
 
       - name: build docker image
         run: |
