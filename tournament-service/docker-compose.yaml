@@ -1,22 +1,26 @@
 version: '3.8'
 
 services:
-  tournamenent-service:
+  tournament-service:
     image: anisbenothman/tournament-service:latest
     container_name: tournament-service
     ports:
       - "8082:8082"
     environment:
-      eureka.client.serviceUrl.defaultZone: "http://discover-service:8761/eureka/"
-      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-db:3306/tournament-service?createDatabaseIfNotExist=true"
-      spring.jpa.properties.hibernate.dialect: "org.hibernate.dialect.MySQL8Dialect"
-      spring.jpa.hibernate.ddl-auto: "update"
-      SPRING_DATASOURCE_USERNAME: "root"
-      SPRING_DATASOURCE_PASSWORD: "root"
+        SPRING_APPLICATION_NAME: tournament-service
+        EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discover-service:8761/eureka/
+        SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/tournament-service?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+        SPRING_DATASOURCE_USERNAME: root
+        SPRING_DATASOURCE_PASSWORD: root
+        SPRING_JPA_HIBERNATE_DDL_AUTO: update
+        SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+
     depends_on:
       - mysql-db
+      - discover-service
     networks:
       - street-foot-network
+    restart: unless-stopped
 
   discover-service:
       image: anisbenothman/discover-service:latest
@@ -29,6 +33,11 @@ services:
   gateway-service:
       image: anisbenothman/gateway:latest
       container_name: gateway-service
+      environment:
+        spring.application.name: "gateway-service"
+        eureka.client.serviceUrl.defaultZone: "http://discover-service:8761/eureka/"
+        spring.cloud.gateway.discovery.locator.enabled: "true"
+        spring.cloud.gateway.discovery.locator.lower-case-service-id: "true"
       ports:
         - "8084:8084"
       networks:
@@ -46,6 +55,13 @@ services:
         - street-foot-network
       volumes:
         - mysql-data:/var/lib/mysql
+      healthcheck:
+        test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot" ]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+        start_period: 30s
+
 networks:
   street-foot-network:
     driver: bridge
