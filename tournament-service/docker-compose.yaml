@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  tournamenent-service:
+    image: anisbenothman/tournament-service:latest
+    container_name: tournament-service
+    ports:
+      - "8082:8082"
+    environment:
+      eureka.client.serviceUrl.defaultZone: "http://discover-service:8761/eureka/"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-db:3306/tournament-service?createDatabaseIfNotExist=true"
+      spring.jpa.properties.hibernate.dialect: "org.hibernate.dialect.MySQL8Dialect"
+      spring.jpa.hibernate.ddl-auto: "update"
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "root"
+    depends_on:
+      - mysql-db
+    networks:
+      - street-foot-network
+
+  discover-service:
+      image: anisbenothman/discover-service:latest
+      container_name: discover-service
+      ports:
+        - "8761:8761"
+      networks:
+        - street-foot-network
+
+  gateway-service:
+      image: anisbenothman/gateway:latest
+      container_name: gateway-service
+      ports:
+        - "8084:8084"
+      networks:
+        - street-foot-network
+
+  mysql-db:
+      image: mysql:8.0
+      container_name: mysql-db
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: tournament-service
+      ports:
+        - "3306:3306"
+      networks:
+        - street-foot-network
+      volumes:
+        - mysql-data:/var/lib/mysql
+networks:
+  street-foot-network:
+    driver: bridge
+volumes:
+  mysql-data:
