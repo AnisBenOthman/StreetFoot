@@ -351,7 +351,7 @@ jobs:
       - name: build docker image
         run: |
           cd Gateway
-          docker build -t anisbenothman/Gateway:latest .
+          docker build -t anisbenothman/gateway:latest .
           echo "Docker image built successfully."
 
       - name: login to dockerhub
@@ -362,6 +362,6 @@ jobs:
 
       - name: deploy to dockerhub
         run: |
-          docker tag anisbenothman/Gateway:latest anisbenothman/Gateway:latest
-          docker push anisbenothman/Gateway:latest
+          docker tag anisbenothman/gateway:latest anisbenothman/gateway:latest
+          docker push anisbenothman/gateway:latest
           echo "Docker image pushed to Docker Hub successfully."
