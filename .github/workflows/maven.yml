@@ -81,6 +81,13 @@ jobs:
           docker tag anisbenothman/tournament-service:latest anisbenothman/tournament-service:latest
           docker push anisbenothman/tournament-service:latest
           echo "Docker image pushed to Docker Hub successfully."
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+          echo "Docker Compose installed successfully."
+
       - name: docker-compose up
         run: |
           cd tournament-service
