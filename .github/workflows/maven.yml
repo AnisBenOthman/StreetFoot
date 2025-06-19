@@ -99,7 +99,7 @@ jobs:
           sleep 30
           echo "Services are up and running."
       - name: test with curl
-        run: curl -v http://localhost:8084/health
+        run: curl -v http://localhost:8084/tournament-service/tournament/getall
     
   
   scheduling-service:
@@ -194,7 +194,7 @@ jobs:
           sleep 30
           echo "Services are up and running."
       - name: test with curl
-        run: curl -v http://localhost:8084/health
+        run: curl -v http://localhost:8084/scheduling-service/match-schedules/getallmatch
   
   standing-service:
     name: standing-service Build & Test
@@ -289,7 +289,7 @@ jobs:
           sleep 30
           echo "Services are up and running."
       - name: test with curl
-        run: curl -v http://localhost:8084/health
+        run: curl -v http://localhost:8084/standing-service/standings/getallstandings
 
   discover-service:
     name: discover-service Build & Test
