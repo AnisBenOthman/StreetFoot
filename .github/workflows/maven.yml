@@ -185,7 +185,7 @@ jobs:
 
       - name: docker-compose up
         run: |
-          cd tournament-service
+          cd SchedulingService
           docker-compose -f docker-compose.yaml up -d
           echo "Docker Compose services started successfully."
       - name: wait for services
@@ -280,7 +280,7 @@ jobs:
 
       - name: docker-compose up
         run: |
-          cd tournament-service
+          cd StandingService
           docker-compose -f docker-compose.yaml up -d
           echo "Docker Compose services started successfully."
       - name: wait for services
