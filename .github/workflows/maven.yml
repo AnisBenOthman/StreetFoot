@@ -282,7 +282,7 @@ jobs:
 
       - name: build docker image
         run: |
-          cd StandingService
+          cd DiscoverService
           docker build -t anisbenothman/discover-service:latest .
           echo "Docker image built successfully."
 
