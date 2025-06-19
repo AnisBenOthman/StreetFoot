@@ -93,6 +93,14 @@ jobs:
           cd tournament-service
           docker-compose -f docker-compose.yaml up -d
           echo "Docker Compose services started successfully."
+      - name: wait for services
+        run: |
+          echo "Waiting for services to start..."
+          sleep 30
+          echo "Services are up and running."
+      - name: test with curl
+        run: curl -v http://localhost:8084/health
+    
   
   scheduling-service:
     name: scheduling-service Build & Test
@@ -168,6 +176,25 @@ jobs:
           docker tag anisbenothman/scheduling-service:latest anisbenothman/scheduling-service:latest
           docker push anisbenothman/scheduling-service:latest
           echo "Docker image pushed to Docker Hub successfully."
+      
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+          echo "Docker Compose installed successfully."
+
+      - name: docker-compose up
+        run: |
+          cd tournament-service
+          docker-compose -f docker-compose.yaml up -d
+          echo "Docker Compose services started successfully."
+      - name: wait for services
+        run: |
+          echo "Waiting for services to start..."
+          sleep 30
+          echo "Services are up and running."
+      - name: test with curl
+        run: curl -v http://localhost:8084/health
   
   standing-service:
     name: standing-service Build & Test
@@ -244,6 +271,25 @@ jobs:
           docker tag anisbenothman/standing-service:latest anisbenothman/standing-service:latest
           docker push anisbenothman/standing-service:latest
           echo "Docker image pushed to Docker Hub successfully."
+      
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+          echo "Docker Compose installed successfully."
+
+      - name: docker-compose up
+        run: |
+          cd tournament-service
+          docker-compose -f docker-compose.yaml up -d
+          echo "Docker Compose services started successfully."
+      - name: wait for services
+        run: |
+          echo "Waiting for services to start..."
+          sleep 30
+          echo "Services are up and running."
+      - name: test with curl
+        run: curl -v http://localhost:8084/health
 
   discover-service:
     name: discover-service Build & Test

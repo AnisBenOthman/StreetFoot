@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  scheduling-service:
+    image: anisbenothman/scheduling-service:latest
+    container_name: scheduling-service
+    ports:
+      - "8083:8083"
+    environment:
+      eureka.client.serviceUrl.defaultZone: "http://discover-service:8761/eureka/"
+      SPRING.DATA.MONGODB.URI: "mongodb://mongodb:27017/scheduling-service"
+      spring.data.mongodb.database: "scheduling-service"
+
+    depends_on:
+      - mongodb
+      - discover-service
+      - gateway-service
+    networks:
+      - street-foot-network
+  discover-service:
+      image: anisbenothman/discover-service:latest
+      container_name: discover-service
+      ports:
+        - "8761:8761"
+      networks:
+        - street-foot-network
+  gateway-service:
+      image: anisbenothman/gateway:latest
+      container_name: gateway-service
+      ports:
+        - "8084:8084"
+      networks:
+        - street-foot-network
+  mongodb:
+      image: mongo:latest
+      container_name: mongodb
+      ports:
+        - "27017:27017"
+      networks:
+        - street-foot-network
+      volumes:
+          - mongo-data:/data/db
+networks:
+    street-foot-network:
+        driver: bridge
+volumes:
+    mongo-data:
