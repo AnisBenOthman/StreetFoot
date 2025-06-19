@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class BaseEntite implements Serializable {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Id
-    @Setter(AccessLevel.NONE)
+    //@Setter(AccessLevel.NONE)
     String id;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     LocalDate createdAt = LocalDate.now();
