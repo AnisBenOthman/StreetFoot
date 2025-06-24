@@ -473,7 +473,7 @@ jobs:
       - name: Run docker-compose on EC2
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            docker-compose -f docker-compose.yaml pull
-            docker-compose -f docker-compose.yaml up -d --remove-orphans
-            docker-compose -f docker-compose.yaml ps
+            docker compose -f docker-compose.yaml pull
+            docker compose -f docker-compose.yaml up -d --remove-orphans
+            docker compose -f docker-compose.yaml ps
           EOF
