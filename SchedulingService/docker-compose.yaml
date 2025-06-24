@@ -10,6 +10,9 @@ services:
       eureka.client.serviceUrl.defaultZone: "http://discover-service:8761/eureka/"
       SPRING.DATA.MONGODB.URI: "mongodb://mongodb:27017/scheduling-service"
       spring.data.mongodb.database: "scheduling-service"
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_KAFKA_CONSUMER_GROUP_ID: scheduling-service-group
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
 
     depends_on:
       - mongodb
@@ -45,5 +48,6 @@ services:
 networks:
     street-foot-network:
         driver: bridge
+        external: true
 volumes:
     mongo-data:

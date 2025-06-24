@@ -14,6 +14,9 @@ services:
         SPRING_DATASOURCE_PASSWORD: root
         SPRING_JPA_HIBERNATE_DDL_AUTO: update
         SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+        SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+        SPRING_KAFKA_CONSUMER_GROUP_ID: tournament-service-group
+        SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
 
     depends_on:
       - mysql-db
@@ -65,5 +68,7 @@ services:
 networks:
   street-foot-network:
     driver: bridge
+    external: true
+
 volumes:
   mysql-data:
