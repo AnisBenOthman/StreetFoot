@@ -444,11 +444,15 @@ jobs:
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
           echo "SSH key set up successfully."
 
-      - name: Install Docker Compose
+      - name: Install Docker and Docker Compose on EC2
         run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
           sudo apt-get update
-          sudo apt-get install -y docker-compose
-          echo "Docker Compose installed successfully."
+          sudo apt-get install -y docker.io docker-compose-plugin
+          sudo usermod -aG docker $USER
+          docker --version
+          docker compose version
+          EOF
 
       - name: Copy docker-compose.yaml to EC2
         run: |
