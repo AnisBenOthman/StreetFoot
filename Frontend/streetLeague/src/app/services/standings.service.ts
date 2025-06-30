@@ -7,7 +7,7 @@ import { Standings } from '../models/standings';
   providedIn: 'root',
 })
 export class StandingsService {
-  private baseUrl = 'http://127.0.0.1:8084/standing-service/standings';
+  private baseUrl = 'http://localhost:8084/standing-service/standings';
 
   constructor(private http: HttpClient) {}
 

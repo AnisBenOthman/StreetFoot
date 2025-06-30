@@ -7,7 +7,7 @@ import { Team } from '../models/team';
   providedIn: 'root',
 })
 export class TeamService {
-  private baseUrl = 'http://127.0.0.1:8084/tournament-service/team/';
+  private baseUrl = 'http://localhost:8084/tournament-service/team/';
 
   constructor(private http: HttpClient) {}
 

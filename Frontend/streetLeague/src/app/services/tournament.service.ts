@@ -8,8 +8,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class TournamentService {
-  apiUrl = 'http://127.0.0.1:8084/tournament-service/tournament/';
-  rulesApiUrl = 'http://127.0.0.1:8084/tournament-service/tournamentrules/';
+  apiUrl = 'http://localhost:8084/tournament-service/tournament/';
+
+  rulesApiUrl = 'http://localhost:8084/tournament-service/tournamentrules/';
   constructor(private http: HttpClient) {}
 
   getTournaments() {

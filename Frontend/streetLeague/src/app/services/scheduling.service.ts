@@ -7,9 +7,9 @@ import { Match, Round } from '../models/additional-models';
   providedIn: 'root',
 })
 export class SchedulingService {
-  roundUrl = 'http://127.0.0.1:8084/sceduling-service/round-schedules/';
-  matchUrl = 'http://127.0.0.1:8084/sceduling-service/match-schedules/';
-  predictUrl = 'http://127.0.0.1:8084/sceduling-service/prediction/';
+  roundUrl = 'http://localhost:8084/sceduling-service/round-schedules/';
+  matchUrl = 'http://localhost:8084/sceduling-service/match-schedules/';
+  predictUrl = 'http://localhost:8084/sceduling-service/prediction/';
 
   constructor(private http: HttpClient) {}
 
